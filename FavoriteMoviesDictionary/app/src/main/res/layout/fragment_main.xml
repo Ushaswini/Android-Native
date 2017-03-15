@@ -1,0 +1,129 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ushaswini.myfavouritemovies_fragments.MainFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="60dp">
+
+        <Button
+            android:text="@string/btn_addmovie_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:id="@+id/btn_add"
+            android:layout_alignParentTop="true"
+            style="@style/Widget.AppCompat.Button"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
+
+        <Button
+            android:text="@string/btn_edit_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="27dp"
+            android:id="@+id/btn_edit"
+            android:layout_below="@+id/btn_add"
+            android:layout_alignLeft="@+id/btn_add"
+            android:layout_alignStart="@+id/btn_add"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
+
+        <Button
+            android:text="@string/btn_delete_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="39dp"
+            android:id="@+id/btn_delete"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:layout_below="@+id/btn_edit"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:text="@string/btn_show_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:id="@+id/btn_show_year"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:layout_below="@+id/btn_delete"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:text="@string/btn_show_rating_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:id="@+id/btn_show_rating"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:layout_below="@+id/btn_show_year"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+    <!--<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/button_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="46dp"
+            android:text="@string/btn_add_label"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/button_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/button_add"
+            android:layout_marginTop="33dp"
+            android:text="@string/btn_edit_label" />
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_delete_label"
+            android:layout_below="@+id/button_edit"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="42dp" />
+
+        <Button
+            android:id="@+id/button_year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/btn_delete"
+            android:layout_marginTop="46dp"
+            android:text="@string/btn_year_label" />
+
+        <Button
+            android:id="@+id/button_rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/button_year"
+            android:layout_marginTop="43dp"
+            android:text="@string/btn_rating_label" />
+    </RelativeLayout>-->
+</FrameLayout>

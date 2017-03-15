@@ -1,0 +1,225 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ushaswini.myfavouritemovies_fragments.MovieRatingFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:id="@+id/activity_display_list_year"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_Name_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_Name"
+            android:layout_alignBottom="@+id/tv_Name"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_toEndOf="@+id/tv_description"
+            android:layout_toRightOf="@+id/tv_description"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/tv_genre_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_rating_value"
+            android:layout_alignStart="@+id/tv_rating_value"
+            android:layout_alignTop="@+id/tv_genre"
+            android:layout_toEndOf="@+id/tv_description" />
+
+        <TextView
+            android:id="@+id/tv_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_genre"
+            android:layout_alignStart="@+id/tv_genre"
+            android:layout_below="@+id/tv_genre"
+            android:layout_marginTop="26dp"
+            android:text="@string/tv_rating_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_IDMB"
+            android:layout_alignStart="@+id/tv_IDMB"
+            android:layout_below="@+id/tv_rating"
+            android:layout_marginTop="39dp"
+            android:text="@string/tv_year_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_rating_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tv_rating"
+            android:layout_toRightOf="@+id/tv_description" />
+
+        <TextView
+            android:id="@+id/tv_year_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_year"
+            android:layout_alignLeft="@+id/tv_rating_value"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignStart="@+id/tv_rating_value"
+            android:layout_alignTop="@+id/tv_year"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/tv_idmb_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_IDMB"
+            android:layout_alignLeft="@+id/tv_year_value"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignStart="@+id/tv_year_value"
+            android:layout_alignTop="@+id/tv_IDMB"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/tv_heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_Name_value"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="10dp"
+            android:text="@string/tv_heading_label"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/tv_year"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/tv_year"
+            android:layout_marginTop="33dp"
+            android:text="@string/tv_Title_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_IDMB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_rating"
+            android:layout_alignStart="@+id/tv_rating"
+            android:layout_below="@+id/tv_year"
+            android:layout_marginTop="30dp"
+            android:text="@string/tv_idmb_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_description_value"
+            android:layout_alignStart="@+id/tv_description_value"
+            android:layout_below="@+id/tv_description_value"
+            android:layout_marginTop="27dp"
+            android:text="@string/tv_genre_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tv_idmb_value"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <ImageButton
+                android:id="@+id/imageButton_first"
+                android:layout_width="53dp"
+                android:layout_height="55dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="5dp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/first" />
+
+            <ImageButton
+                android:id="@+id/imageButton_previous"
+                android:layout_width="53dp"
+                android:layout_height="55dp"
+                android:layout_marginRight="5dp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/previous" />
+
+            <Button
+                android:id="@+id/button_finsih"
+                android:layout_width="84dp"
+                android:layout_height="56dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="0.56"
+                android:text="Finish"
+                android:textAllCaps="false" />
+
+            <ImageButton
+                android:id="@+id/imageButton_next"
+                android:layout_width="51dp"
+                android:layout_height="54dp"
+                android:layout_marginRight="5dp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/next" />
+
+            <ImageButton
+                android:id="@+id/imageButton_last"
+                android:layout_width="54dp"
+                android:layout_height="53dp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/last" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_description_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_description"
+            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="10dp"
+            android:height="100dp"
+            android:background="@drawable/background"
+            android:ems="10"
+            android:inputType="textMultiLine" />
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_Name"
+            android:layout_alignStart="@+id/tv_Name"
+            android:layout_below="@+id/tv_Name"
+            android:layout_marginTop="12dp"
+            android:text="@string/tv_description_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp" />
+
+
+    </RelativeLayout>
+
+</FrameLayout>

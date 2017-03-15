@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">MyFavouriteMovies_Fragments</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="btn_add_label">Add Movie</string>
+    <string name="btn_year_label">Show List by Year</string>
+    <string name="btn_rating_label">Show List by Rating</string>
+    <string name="btn_edit_label">Edit</string>
+    <string name="btn_delete_label">Delete Movie</string>
+
+    <string name="btn_addmovie_label">Add Movie</string>
+
+    <string name="btn_show_label">Show List by Year</string>
+    <string name="btn_show_rating_label">Show List By Rating</string>
+    <string name="title_activity_add_movie">AddMovieActivity</string>
+    <string name="tv_Name_label">Name:</string>
+    <string name="tv_description_label">Description:</string>
+    <string name="tv_genre_label">Genre:</string>
+    <string name="tv_rating_label">Rating:</string>
+    <string name="tv_year_label">Year:</string>
+    <string name="tv_idmb_label">IDMB:</string>
+    <string name="btn_savechanges_label">Save Changes</string>
+    <string name="tv_Title_label">Title</string>
+    <string name="tv_heading_label">Movies By Rating</string>
+    <string name="btn_finsh_label">Finish</string>
+    <string name="tv_heading_year_label">Movies by Year</string>
+
+    <string-array name="genre_collection">
+        <item>Action</item>
+        <item>Animation</item>
+        <item>Comedy</item>
+        <item>Documentary</item>
+        <item>Family</item>
+        <item>Horror</item>
+        <item>Crime</item>
+        <item>Others</item>
+    </string-array>
+</resources>

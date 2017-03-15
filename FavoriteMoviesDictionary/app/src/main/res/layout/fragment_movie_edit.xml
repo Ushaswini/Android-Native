@@ -1,0 +1,185 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ushaswini.myfavouritemovies_fragments.MovieEditFragment">
+
+    <RelativeLayout
+        android:id="@+id/activity_edit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="17dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="22dp"
+            android:text="@string/tv_Name_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/tv_Name_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_Name"
+            android:layout_alignBottom="@+id/tv_Name"
+            android:layout_alignEnd="@+id/tv_description_value"
+            android:layout_alignRight="@+id/tv_description_value"
+            android:layout_toRightOf="@+id/tv_description"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <Spinner
+            android:id="@+id/spinner_genre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/seekBar_rating"
+            android:layout_alignStart="@+id/seekBar_rating"
+            android:layout_alignTop="@+id/tv_genre"
+            android:layout_toLeftOf="@+id/tV_Rating_numeric"
+            android:layout_toStartOf="@+id/tV_Rating_numeric" />
+
+        <TextView
+            android:id="@+id/tv_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_genre"
+            android:layout_alignStart="@+id/tv_genre"
+            android:layout_below="@+id/spinner_genre"
+            android:layout_marginTop="32dp"
+            android:text="@string/tv_rating_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_rating"
+            android:layout_alignStart="@+id/tv_rating"
+            android:layout_below="@+id/tv_rating"
+            android:layout_marginTop="33dp"
+            android:text="@string/tv_year_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp" />
+
+        <SeekBar
+            android:id="@+id/seekBar_rating"
+            style="@android:style/Widget.DeviceDefault.Light.SeekBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/btn_editMovie"
+            android:layout_alignRight="@+id/btn_editMovie"
+            android:layout_alignTop="@+id/tv_rating"
+            android:layout_toRightOf="@+id/tv_description"
+            android:max="5"
+            android:padding="0dp"
+            android:paddingLeft="0dp"
+            android:progress="1" />
+
+        <EditText
+            android:id="@+id/tv_year_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_year"
+            android:layout_alignLeft="@+id/seekBar_rating"
+            android:layout_alignStart="@+id/seekBar_rating"
+            android:layout_toLeftOf="@+id/tV_Rating_numeric"
+            android:layout_toStartOf="@+id/tV_Rating_numeric"
+            android:ems="10"
+            android:inputType="numberSigned" />
+
+        <Button
+            android:id="@+id/btn_editMovie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:layout_toEndOf="@+id/tv_description"
+            android:layout_toRightOf="@+id/tv_description"
+            android:text="@string/btn_savechanges_label"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_description_value"
+            android:layout_alignStart="@+id/tv_description_value"
+            android:layout_below="@+id/tv_description_value"
+            android:layout_marginTop="26dp"
+            android:text="@string/tv_genre_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/tv_description_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/spinner_genre"
+            android:layout_alignLeft="@+id/tv_description"
+            android:layout_alignRight="@+id/spinner_genre"
+            android:layout_alignStart="@+id/tv_description"
+            android:layout_below="@+id/tv_description"
+            android:layout_marginTop="15dp"
+            android:height="100dp"
+            android:background="@drawable/background"
+            android:ems="10"
+            android:inputType="textMultiLine" />
+
+        <TextView
+            android:id="@+id/tv_IDMB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_idmb_value"
+            android:layout_alignBottom="@+id/tv_idmb_value"
+            android:layout_alignLeft="@+id/tv_year"
+            android:layout_alignStart="@+id/tv_year"
+            android:text="@string/tv_idmb_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/tv_idmb_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_year_value"
+            android:layout_alignStart="@+id/tv_year_value"
+            android:layout_below="@+id/tv_year_value"
+            android:layout_marginTop="19dp"
+            android:layout_toStartOf="@+id/tV_Rating_numeric"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_Name"
+            android:layout_alignStart="@+id/tv_Name"
+            android:layout_below="@+id/tv_Name_value"
+            android:text="@string/tv_description_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tV_Rating_numeric"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/seekBar_rating"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:paddingRight="10dp"
+            android:text="1" />
+
+    </RelativeLayout>
+</FrameLayout>
