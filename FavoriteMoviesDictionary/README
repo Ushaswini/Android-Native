@@ -1,0 +1,6 @@
+Favorite Movies Dictionar App
+This app allows user to enter movie and it details.
+User can perform actions like edit, delete and sort movies based on
+rating or year in which it is released.
+
+This app uses fragments.
