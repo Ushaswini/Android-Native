@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CNN News</string>
+    <string name="btn_get">Get News</string>
+    <string name="tv_loading_label">Loading</string>
+</resources>
