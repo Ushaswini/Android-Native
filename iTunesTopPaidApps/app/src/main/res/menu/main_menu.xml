@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/refresh"
+        android:orderInCategory="1"
+        app:showAsAction="never"
+        android:title="@string/refresh"/>
+    <item
+        android:id="@+id/favorites"
+        android:orderInCategory="2"
+        app:showAsAction="never"
+        android:title="@string/favorites"/>
+    <item
+        android:id="@+id/sort_increasingly"
+        android:orderInCategory="3"
+        app:showAsAction="never"
+        android:title="@string/sort_increasingly"/>
+    <item
+        android:id="@+id/sort_decreasingly"
+        android:orderInCategory="4"
+        app:showAsAction="never"
+        android:title="@string/sort_decresingly"/>
+</menu>
