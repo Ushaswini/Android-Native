@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">TriviaApp</string>
+    <string name="title_label">Welcome to Trivia App</string>
+    <string name="btn_exit_label">Exit</string>
+    <string name="btn_start_label">Start Trivia</string>
+    <string name="tv_timeRemaininglabel">Time Left:</string>
+    <string name="tv_questionNumLabel">Q1</string>
+    <string name="tv_questionTextLabel" />
+    <string name="btn_previous_label">Previous</string>
+    <string name="btn_next_label">Next</string>
+    <string name="tv_correctans_label">Correct Answers</string>
+    <string name="tv_performance_label">Your Performance</string>
+    <string name="btn_finish_label">Finish</string>
+</resources>
