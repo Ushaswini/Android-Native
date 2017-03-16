@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">GameDB</string>
+    <string name="btn_search_label">Search</string>
+    <string name="btn_go_label">Go</string>
+    <string name="tv_genre_label">Genre :</string>
+    <string name="tv_publisher_label">Publisher :</string>
+    <string name="tv_overview_label">Overview :</string>
+    <string name="btn_trailer_label">Play Trailer</string>
+    <string name="btn_similar_label">Similar Games</string>
+    <string name="btn_finish_label">Finish</string>
+    <string name="tv_similar_title_lable">Similar Games to</string>
+</resources>
