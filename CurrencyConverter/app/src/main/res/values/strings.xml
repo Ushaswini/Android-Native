@@ -1,0 +1,17 @@
+<!--
+HOME WORK-1
+MAIN ACTIVITY
+VINNAKOTA VENKATA RATNA USHASWINI-->
+
+<resources>
+    <string name="app_name">CurrencyConverter</string>
+    <string name="btn_convert_label">Convert</string>
+    <string name="btn_clear_label"> Clear </string>
+    <string name="rb_AUD_label">AUD</string>
+    <string name="rb_CAD_label">CAD</string>
+    <string name="rb_INR_label">INR</string>
+    <string name="rb_USD_label"> USD </string>
+    <string name="rb_GBP_label">GBP</string>
+    <string name="textView_Convert_label">Convert To</string>
+    <string name="editText_Input">Input Amount</string>
+</resources>

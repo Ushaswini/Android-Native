@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:id="@+id/editText_Input"
+        android:gravity="center_vertical|center"
+        android:hint="@string/editText_Input" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:id="@+id/radioGroup_Input">
+
+        <RadioButton
+            android:text="@string/rb_AUD_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rb_AUD"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:text="@string/rb_CAD_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rb_CAD"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:text="@string/rb_INR_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rb_INR" />
+    </RadioGroup>
+
+    <TextView
+        android:text="Convert To"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView_Convert"
+        android:layout_weight="0.26"
+        android:gravity="center_vertical|center"
+        android:tag="@string/textView_Convert_label"
+        android:textColorLink="@android:color/background_dark"
+        android:textStyle="normal|bold" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|center"
+        android:id="@+id/radioGroup_Output">
+
+        <RadioButton
+            android:text="@string/rb_USD_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rb_USD" />
+
+        <RadioButton
+            android:text="@string/rb_GBP_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rb_GBP" />
+    </RadioGroup>
+
+    <Button
+        android:text="@string/btn_convert_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Btn_Convert" />
+
+    <TextView
+        android:text=""
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/output"
+        android:layout_weight="0.22"
+        android:gravity="center_vertical|center"
+        android:hint="Output Value" />
+
+    <Button
+        android:text="@string/btn_clear_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Btn_Clear"
+        android:onClick="onCancelClick"/>
+</LinearLayout>
