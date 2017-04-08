@@ -1,9 +1,12 @@
 package com.ushaswini.chitchat;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -33,13 +36,13 @@ import okhttp3.Response;
 public class MessageActivity extends AppCompatActivity {
 
     Channel channel;
-    SharedPreferences.Editor editor;
-    String session;
+    /*SharedPreferences.Editor editor;
+    String session;*/
     private OkHttpClient client;
 
     ArrayList<Message> messageList;
-    Message message;
     MessageAdapter adapter;
+    String token = "";
 
     TextView channelName;
     EditText editText;
@@ -63,19 +66,25 @@ public class MessageActivity extends AppCompatActivity {
         btn_send = (Button) findViewById(R.id.button_send);
         listView = (ListView) findViewById(R.id.list_channel_body);
 
-        SharedPreferences sessions = getSharedPreferences("com.ushaswini.chitchat", MODE_PRIVATE);
+        /*SharedPreferences sessions = getSharedPreferences("com.ushaswini.chitchat", MODE_PRIVATE);
         editor = sessions.edit();
-        session = sessions.getString(MainActivity.PREF_TAG, "");
+        session = sessions.getString(MainActivity.PREF_TAG, "");*/
         //Log.d("session",session + "is null");
 
         if(getIntent().getExtras().containsKey(ChannelsArrayAdapter.CHANNEL_ID)){
             channel = (Channel) getIntent().getExtras().getSerializable(ChannelsArrayAdapter.CHANNEL_ID);
             channelName.setText(channel.getChannel_name());
+            if(getIntent().getExtras().containsKey(MainActivity.TOKEN_TAG)){
+                token = (String) getIntent().getExtras().get(MainActivity.TOKEN_TAG);
+                Log.d("token after geting ",token + " this");
+            }
             getMessages(channel);
         }
 
+
         messageList = new ArrayList<>();
         adapter = new MessageAdapter(MessageActivity.this, R.layout.custom_row_message, messageList);
+        listView.setAdapter(adapter);
         adapter.setNotifyOnChange(true);
 
         btn_send.setOnClickListener(new View.OnClickListener() {
@@ -83,17 +92,22 @@ public class MessageActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                Log.d("token",session);
+                Log.d("token in btn_send",token);
+                String channel_id = channel.getChannel_id();
+                Log.d("channel id",channel_id);
+                Log.d("edittext ",editText.getText().toString());
+                Log.d("time",Calendar.getInstance().getTime().toString());
+
                 RequestBody formBody = new FormBody.Builder()
                         .add(MESSAGE_TEXT_KEY, editText.getText().toString())
-                        .add(CHANNEL_ID, channel.getChannel_id())
+                        .add(CHANNEL_ID, channel_id)
                         .add(MESSAGE_TIME_KEY,Calendar.getInstance().toString())
                         .build();
 
                 Request request = new Request.Builder()
                         .url(MainActivity.POST_MESSAGE_URL)
                         .header("Content-Type", "application/x-www-form-urlencoded")
-                        .header("Authorization", "BEARER " + session)
+                        .header("Authorization", "BEARER " + token)
                         .post(formBody)
                         .build();
 
@@ -128,7 +142,7 @@ public class MessageActivity extends AppCompatActivity {
                                         Toast.makeText(MessageActivity.this,"Operation successful",Toast.LENGTH_SHORT).show();
 
                                     }else{
-                                        Log.d("error",decoded.getMessage());
+                                        Log.d("error",decoded.getMessage()+decoded.getStatus()+decoded.getToken());
                                         Toast.makeText(MessageActivity.this,"Operation unsuccessful",Toast.LENGTH_SHORT).show();
                                     }
 
@@ -144,11 +158,12 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void getMessages(Channel channel){
-        System.out.print(MainActivity.GET_MESSAGE_URL + channel.getChannel_id());
+        //System.out.print(MainActivity.GET_MESSAGE_URL + channel.getChannel_id());
+        Log.d("token in getMessages",token);
 
         final Request request = new Request.Builder()
                 .url(MainActivity.GET_MESSAGE_URL + channel.getChannel_id())
-                .header("Authorization", "BEARER " + session)
+                .header("Authorization", "BEARER " + token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -163,6 +178,7 @@ public class MessageActivity extends AppCompatActivity {
                     if(response.isSuccessful()){
                         final ArrayList<Message> messages = ResponseJSONUtil.ResponseJSONParser.parseMessages(response.body().string());
 
+                        Log.d("messages",messages.toString());
                         if(messages.size() >0){
                             runOnUiThread(new Runnable() {
 
@@ -195,5 +211,31 @@ public class MessageActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.custom_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.action_refresh:
+                break;
+            case R.id.action_logout:
+
+                final SharedPreferences myPrefs = getSharedPreferences("com.ushaswini.inclass09", MODE_PRIVATE);
+                final SharedPreferences.Editor prefsEditor = myPrefs.edit();
+                prefsEditor.clear().commit();
+
+                Intent intent = new Intent(MessageActivity.this,MainActivity.class);
+                startActivity(intent);
+
+                break;
+        }
+
+        return true;
     }
 }

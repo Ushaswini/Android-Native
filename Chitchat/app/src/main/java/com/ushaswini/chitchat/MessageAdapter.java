@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.ocpsoft.pretty.time.PrettyTime;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -68,15 +72,24 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             Date date1 = Calendar.getInstance().getTime();
             //TimeUnit.MILLISECONDS.toMinutes(Long.parseLong(message.getMsgTime()));
 
+            /*SimpleDateFormat spm = new SimpleDateFormat();
+            Date date = spm.parse(message.getMsgTime());
+
+            PrettyTime time = new PrettyTime();
+            String str = time.format(date);*/
+
+            //Log.d("time",str);
+
             String time = TimeUnit.MILLISECONDS.toMinutes(date1.getTime()) - TimeUnit.MILLISECONDS.toMinutes(message.getMsgDate())  + " minutes ago";
 
             String text = message.getFname() + " " + message.getLname() + "\n" + message.getMsgtext() + "\n" + time;
+            Log.d("text",text);
             tv_message.setText(text);
 
 
 
         }catch (Exception oExcep){
-
+            Log.d("error",oExcep.getMessage());
         }
 
         return convertView;

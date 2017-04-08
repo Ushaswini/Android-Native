@@ -94,6 +94,8 @@ public class ChannelsArrayAdapter extends ArrayAdapter<Channel> {
                     {
                         Intent intent = new Intent(mContext,MessageActivity.class);
                         intent.putExtra(CHANNEL_ID,channel);
+                        Log.d("token in adapter",token);
+                        intent.putExtra(MainActivity.TOKEN_TAG,token);
                         mContext.startActivity(intent);
                     }
                     else
