@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"  android:layout_height="wrap_content" android:layout_width="wrap_content">
+
+    <ListPreference
+        android:title="Temperature Unit"
+        android:summary="Choose between Celsius or Fahrenheit"
+        android:key="temperatureUnit"
+        android:entries="@array/temperatureUnit"
+        android:entryValues="@array/temperatureUnitValues"
+        android:defaultValue="0"/>
+
+    <com.ushaswini.homework09.CustomEditTextPreference
+        android:title="Current City"
+        android:key="CityPreference"
+        android:summary="Change Current City"/>
+
+</PreferenceScreen>
