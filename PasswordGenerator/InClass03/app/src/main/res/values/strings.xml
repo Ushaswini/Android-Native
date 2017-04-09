@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">InClass03</string>
+    <string name="tv_for_thread_label">For Thread</string>
+    <string name="tv_count_label">Select Password Count</string>
+    <string name="tv_thread_count_value">1</string>
+    <string name="tv_length">Select Password Length</string>
+    <string name="tv_thread_length_value">7</string>
+    <string name="tv_async_label">For Async Task</string>
+    <string name="tv_async_count_label">1</string>
+    <string name="tv_async_length_value">7</string>
+    <string name="btn_generate_label">Generate</string>
+</resources>
