@@ -121,7 +121,7 @@ public class CityWeatherActivity extends AppCompatActivity implements IShareData
                 city = getIntent().getExtras().getString(MainActivity.CITY_TAG);
                 country = getIntent().getExtras().getString(MainActivity.COUNTRY_TAG);
 
-                tv_title.setText("Daily forecast for " + city + ", " + country);
+               // tv_title.setText("Daily forecast for " + city + ", " + country);
 
                 RequestParams params = new RequestParams(LOCATION_URL,"GET");
                 params.setCity(city);
@@ -194,6 +194,9 @@ public class CityWeatherActivity extends AppCompatActivity implements IShareData
 
             RequestParams params = new RequestParams(DAYS_5_URL,"GET");
 
+            tv_title.setText("Daily forecast for " + cityDetails.getCity() + ", " + cityDetails.getCountry());
+
+
             params.setCountry(cityDetails.getCountry());
             params.setCity(cityDetails.getCity());
 
@@ -257,6 +260,7 @@ public class CityWeatherActivity extends AppCompatActivity implements IShareData
 
 
         try {
+
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
             Date date = format.parse(forecast.getDate());
             SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd , yyyy", Locale.US);
@@ -418,10 +422,10 @@ public class CityWeatherActivity extends AppCompatActivity implements IShareData
                 BigDecimal bd_max = new BigDecimal(Float.toString(temp_max_cel));
                 bd_max = bd_max.setScale(1, BigDecimal.ROUND_CEILING);
 
-                temperature = "Temperature " + bd_max.floatValue()+ "/" + bd_min.floatValue();
+                temperature = "Temperature " + bd_max.floatValue()+ DEGREE_SIGN_UNICODE + "/" + bd_min.floatValue() + DEGREE_SIGN_UNICODE ;
 
             }else{
-                temperature = "Temperature " + dailyForecasts.get(current).getMaximum().getValue() + "/" + dailyForecasts.get(current).getMinimum().getValue();
+                temperature = "Temperature " + dailyForecasts.get(current).getMaximum().getValue() + DEGREE_SIGN_UNICODE + "/" + dailyForecasts.get(current).getMinimum().getValue() + DEGREE_SIGN_UNICODE ;
             }
             tv_temp.setText(temperature);
         }

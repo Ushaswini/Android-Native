@@ -1,196 +1,223 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/Relative"
+
+<ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:background="@android:color/background_light"
-    tools:context="com.ushaswini.homework09.CityWeatherActivity">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tv_city"
+    <RelativeLayout
+        android:id="@+id/Relative"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textColor="@android:color/holo_blue_dark"
-        android:textSize="18sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:text="@string/heading"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_below="@+id/tv_city"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:id="@+id/tv_heading"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="14sp"
-        android:layout_below="@+id/tv"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:id="@+id/tv_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textStyle="bold"
-        android:layout_below="@+id/tv_heading"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:id="@+id/tv_updated"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv"
-        android:layout_alignStart="@+id/tv"
-        android:layout_below="@+id/tv_date"
-        android:layout_marginLeft="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat" />
-
-    <TextView
-        android:id="@+id/tv_con"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/Condition"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textStyle="bold"
-        android:layout_below="@+id/tv_updated"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:id="@+id/tv_day"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/im_day"
-        android:layout_alignLeft="@+id/im_day"
-        android:layout_alignRight="@+id/im_day"
-        android:layout_alignStart="@+id/im_day"
-        android:layout_below="@+id/tv_con"
-        android:text="Day"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat" />
-
-    <TextView
-        android:id="@+id/tv_night"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/im_day"
-        android:layout_alignEnd="@+id/im_night"
-        android:layout_alignLeft="@+id/im_night"
-        android:layout_alignRight="@+id/im_night"
-        android:layout_alignStart="@+id/im_night"
-        android:text="Night"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat" />
-
-    <ImageView
-        android:id="@+id/im_day"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_alignLeft="@+id/tv_updated"
-        android:layout_alignStart="@+id/tv_updated"
-        android:layout_below="@+id/tv_day"
-        android:scaleType="fitXY"
-        app:srcCompat="@mipmap/ic_launcher" />
-
-    <ImageView
-        android:id="@+id/im_night"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tv_night"
-        android:layout_marginEnd="25dp"
-        android:layout_marginRight="25dp"
-        android:scaleType="fitXY"
-        app:srcCompat="@mipmap/ic_launcher" />
-
-    <TextView
-        android:id="@+id/tv_day_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        android:layout_below="@+id/im_day"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/tv_con"
-        android:layout_toStartOf="@+id/tv_con" />
-
-    <TextView
-        android:id="@+id/tv_night_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_more_details"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        android:layout_toRightOf="@+id/tv_con"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:id="@+id/btn_more_details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tv_day_comment"
-        android:layout_marginTop="5dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:background="@android:color/background_light"
-        android:paddingTop="-5dp"
-        android:text="@string/more_details"
-        android:textAllCaps="false"
-        android:textColor="@color/colorPrimaryDark" />
+        tools:context="com.ushaswini.homework09.CityWeatherActivity">
 
-    <Button
-        android:id="@+id/btn_extended"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_date"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/tv_date"
-        android:layout_toEndOf="@+id/tv_day_comment"
-        android:background="@android:color/background_light"
-        android:text="@string/extended_forecast"
-        android:textAllCaps="false"
-        android:textColor="@color/colorPrimaryDark" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_forecasts"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_extended"
-        android:layout_alignLeft="@+id/btn_extended"
-        android:layout_alignStart="@+id/btn_extended"
-        android:layout_below="@+id/btn_more_details"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:clickable="false" />
+        <TextView
+            android:id="@+id/tv_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="TextView"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="18sp" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_city"
+            android:layout_marginTop="13dp"
+            android:text="@string/heading"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv"
+            android:layout_marginTop="15dp"
+            android:text="TextView"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_heading"
+            android:layout_marginTop="11dp"
+            android:text="TextView"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_updated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv"
+            android:layout_alignStart="@+id/tv"
+            android:layout_below="@+id/tv_date"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:text="TextView"
+            android:textAppearance="@style/TextAppearance.AppCompat" />
+
+        <TextView
+            android:id="@+id/tv_con"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_updated"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/Condition"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/im_day"
+            android:layout_alignLeft="@+id/im_day"
+            android:layout_alignRight="@+id/im_day"
+            android:layout_alignStart="@+id/im_day"
+            android:layout_below="@+id/tv_con"
+            android:text="Day"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat" />
+
+        <TextView
+            android:id="@+id/tv_night"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/im_day"
+            android:layout_alignEnd="@+id/im_night"
+            android:layout_alignLeft="@+id/im_night"
+            android:layout_alignRight="@+id/im_night"
+            android:layout_alignStart="@+id/im_night"
+            android:text="Night"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat" />
+
+        <ImageView
+            android:id="@+id/im_day"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_alignLeft="@+id/tv_updated"
+            android:layout_alignStart="@+id/tv_updated"
+            android:layout_below="@+id/tv_day"
+            android:scaleType="fitXY"
+            app:srcCompat="@mipmap/ic_launcher" />
+
+        <ImageView
+            android:id="@+id/im_night"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_night"
+            android:layout_marginEnd="25dp"
+            android:layout_marginRight="25dp"
+            android:scaleType="fitXY"
+            app:srcCompat="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/tv_day_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/im_day"
+            android:layout_toLeftOf="@+id/tv_con"
+            android:layout_toStartOf="@+id/tv_con"
+            android:text="TextView"
+            android:textAppearance="@style/TextAppearance.AppCompat" />
+
+        <TextView
+            android:id="@+id/tv_night_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_more_details"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/tv_con"
+            android:text="TextView"
+            android:textAppearance="@style/TextAppearance.AppCompat" />
+
+        <Button
+            android:id="@+id/btn_more_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_day_comment"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/background_light"
+            android:paddingTop="-5dp"
+            android:text="@string/more_details"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryDark" />
+
+        <!--<Button
+            android:id="@+id/btn_extended"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_date"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/tv_date"
+            android:layout_toEndOf="@+id/tv_day_comment"
+            android:background="@android:color/background_light"
+            android:text="@string/extended_forecast"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryDark" />-->
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_forecasts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/btn_more_details"
+            android:layout_marginLeft="11dp"
+            android:layout_marginStart="11dp"
+            android:clickable="false">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <Button
+            android:id="@+id/btn_extended"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/rv_forecasts"
+            android:background="@android:color/background_light"
+            android:text="@string/extended_forecast"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryDark" />
+
+    </RelativeLayout>
+</ScrollView>
+
+
+
+
+

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Homework09</string>
-    <string name="NoCityToDisplay">There are no cities to display. Search the city from from the search box and save.</string>
+    <string name="NoCityToDisplay">There are no cities to display. Search the city from the search box and save.</string>
     <string name="Country">Enter your Country</string>
     <string name="City">Enter your City</string>
     <string name="set">Set</string>

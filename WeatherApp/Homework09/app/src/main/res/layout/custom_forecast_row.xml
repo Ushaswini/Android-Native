@@ -28,7 +28,7 @@
         <ImageView
             android:id="@+id/im_status"
             android:layout_width="95dp"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
             android:layout_marginBottom="10dp"
 
             app:srcCompat="@mipmap/ic_launcher" />

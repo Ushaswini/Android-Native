@@ -184,10 +184,16 @@ public class MainActivity extends AppCompatActivity implements IShareData, Curre
             String city = et_city.getText().toString();
             String country = et_country.getText().toString();
 
-            Intent intent = new Intent(MainActivity.this,CityWeatherActivity.class);
-            intent.putExtra(CITY_TAG,city);
-            intent.putExtra(COUNTRY_TAG,country);
-            startActivity(intent);
+            if(city.equals("") || country.equals("")){
+                Toast.makeText(MainActivity.this,"Enter complete details.",Toast.LENGTH_SHORT).show();
+            }else {
+                Intent intent = new Intent(MainActivity.this,CityWeatherActivity.class);
+                intent.putExtra(CITY_TAG,city);
+                intent.putExtra(COUNTRY_TAG,country);
+                startActivity(intent);
+            }
+
+
 
 
         }
@@ -323,16 +329,28 @@ public class MainActivity extends AppCompatActivity implements IShareData, Curre
 
         btn_set.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                RequestParams params = new RequestParams(LOCATION_URL,"GET");
-                params.setCity(et_city.getText().toString());
-                params.setCountry(et_country.getText().toString());
+            public void onClick(View v) {;
 
-                params.addParam("apikey",API_KEY);
-                params.addParam("q",et_city.getText().toString());
 
-                new GetCityDetailsAsyncTask(MainActivity.this).execute(params);
-                dialog.dismiss();
+                String city = et_city.getText().toString();
+                String country = et_country.getText().toString();
+
+
+                if(city.equals("") || country.equals("")){
+                    Toast.makeText(MainActivity.this,"Enter complete details.",Toast.LENGTH_SHORT).show();
+                }else {
+                    RequestParams params = new RequestParams(LOCATION_URL,"GET");
+                    params.setCity(city);
+                    params.setCountry(country);
+
+                    params.addParam("apikey",API_KEY);
+                    params.addParam("q",et_city.getText().toString());
+
+                    new GetCityDetailsAsyncTask(MainActivity.this).execute(params);
+                    dialog.dismiss();
+
+                }
+
             }
         });
 

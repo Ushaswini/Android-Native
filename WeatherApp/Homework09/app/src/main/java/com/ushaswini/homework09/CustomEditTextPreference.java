@@ -26,9 +26,12 @@ public class CustomEditTextPreference extends DialogPreference {
     Button btn_ok;
     Button btn_cancel;
 
+    SharedPreferences myPrefs;
+
     public CustomEditTextPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         setPersistent(false);
+        myPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         setDialogLayoutResource(R.layout.alert_dialog_inputs);
     }
 
@@ -40,7 +43,11 @@ public class CustomEditTextPreference extends DialogPreference {
     }
 
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder){
-        builder.setTitle("Enter city details");
+        if(myPrefs.getString(MainActivity.PREF_CITY_TAG,"").equals("")){
+            builder.setTitle("Enter city details");
+        }else{
+            builder.setTitle("Update city details");
+        }
         builder.setPositiveButton(null,null);
         builder.setNegativeButton(null,null);
         super.onPrepareDialogBuilder(builder);
@@ -48,7 +55,7 @@ public class CustomEditTextPreference extends DialogPreference {
 
     @Override
     protected void onBindDialogView(View view) {
-        SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+
         et_city = (EditText) view.findViewById(R.id.et_city);
         et_country = (EditText) view.findViewById(R.id.et_country);
         btn_ok = (Button)view.findViewById(R.id.btn_ok);

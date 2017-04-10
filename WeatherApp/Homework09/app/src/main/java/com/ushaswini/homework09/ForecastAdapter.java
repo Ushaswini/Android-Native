@@ -116,10 +116,13 @@ public class ForecastAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHold
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd, MMM ''yy");
             String dateStr = dateFormat.format(date).toString();
+            Log.d("date",dateStr);
             holder.tv_date.setText(dateStr);
 
 
         } catch (ParseException e) {
+
+            Log.d("error",e.getMessage());
             e.printStackTrace();
         }
     }
