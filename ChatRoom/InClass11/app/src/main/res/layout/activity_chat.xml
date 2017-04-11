@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ushaswini.inclass11.ChatActivity">
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="18sp" />
+
+    <ImageButton
+        android:id="@+id/im_logout"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/logout"
+        android:layout_alignBottom="@+id/tv_name"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="14dp"
+        android:layout_marginEnd="14dp" />
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_below="@+id/tv_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
+
+    <EditText
+        android:id="@+id/et_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:ems="10"
+        android:hint="@string/message"
+        android:inputType="textPersonName"
+        android:layout_toLeftOf="@+id/im_send"
+        android:layout_toStartOf="@+id/im_send" />
+
+    <ImageButton
+        android:id="@+id/im_send"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/send"
+        android:layout_alignTop="@+id/im_gallery"
+        android:layout_toLeftOf="@+id/im_gallery"
+        android:layout_toStartOf="@+id/im_gallery"
+        android:layout_marginRight="18dp"
+        android:layout_marginEnd="18dp" />
+
+    <ImageButton
+        android:id="@+id/im_gallery"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignEnd="@+id/im_logout"
+        android:layout_alignRight="@+id/im_logout"
+        android:layout_alignTop="@+id/et_input"
+        android:scaleType="fitXY"
+        android:background="@drawable/gallery" />
+</RelativeLayout>

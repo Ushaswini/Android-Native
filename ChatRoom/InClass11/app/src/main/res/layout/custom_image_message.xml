@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/tv_updated_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cardview_shadow_start_color">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="23dp"
+            app:srcCompat="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_updated"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="36dp"
+            android:layout_marginStart="36dp"
+            android:text="texxt"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/im_delete"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_toLeftOf="@+id/im_comment"
+            android:layout_toStartOf="@+id/im_comment"
+            android:background="@drawable/delete"
+            android:scaleType="fitXY" />
+
+        <ImageButton
+            android:id="@+id/im_comment"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/im_delete"
+            android:layout_marginEnd="26dp"
+            android:layout_marginRight="26dp"
+            android:background="@drawable/comment"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/tv_updated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/im_comment"
+            android:layout_alignRight="@+id/im_comment"
+            android:layout_below="@+id/imageView"
+            android:text="TextView" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linae_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="150dp"
+        android:orientation="vertical"></LinearLayout>
+
+</android.support.v7.widget.CardView>

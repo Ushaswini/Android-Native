@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ushaswini.inclass11.SignUpActivity">
+
+    <EditText
+        android:id="@+id/editText_fName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:ems="10"
+        android:hint="@string/first_name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editText_lName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText_fName"
+        android:layout_alignStart="@+id/editText_fName"
+        android:layout_below="@+id/editText_fName"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="@string/last_name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editText_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText_lName"
+        android:layout_alignStart="@+id/editText_lName"
+        android:layout_below="@+id/editText_lName"
+        android:layout_marginTop="27dp"
+        android:ems="10"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/editText_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/editText_email"
+        android:layout_alignRight="@+id/editText_email"
+        android:layout_below="@+id/editText_email"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="@string/choose_password"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/editText_repeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText_password"
+        android:layout_alignStart="@+id/editText_password"
+        android:layout_below="@+id/editText_password"
+        android:layout_marginTop="33dp"
+        android:ems="10"
+        android:hint="@string/repeat_password"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/button_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText_repeat"
+        android:layout_alignStart="@+id/editText_repeat"
+        android:layout_below="@+id/editText_repeat"
+        android:layout_marginTop="42dp"
+        android:text="@string/cancel"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/button_signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/button_cancel"
+        android:layout_alignEnd="@+id/editText_repeat"
+        android:layout_alignRight="@+id/editText_repeat"
+        android:text="@string/sign_up"
+        android:textAllCaps="false"/>
+</RelativeLayout>

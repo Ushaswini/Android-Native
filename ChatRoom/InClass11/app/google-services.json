@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "889142678179",
+    "firebase_url": "https://chatroom-febb9.firebaseio.com",
+    "project_id": "chatroom-febb9",
+    "storage_bucket": "chatroom-febb9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:889142678179:android:4a1202c0b52b451a",
+        "android_client_info": {
+          "package_name": "com.ushaswini.inclass11"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "889142678179-avuhkm48ch5gb2lvbjtj5a7rnubhnoj7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ushaswini.inclass11",
+            "certificate_hash": "270cf80bfdc04a22f2c246bc19a14ed4ec284ceb"
+          }
+        },
+        {
+          "client_id": "889142678179-79qgsqodiqeq92dgieteke13ipvnnd6h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnJPzz-gXJsB1McNtMXpNtayx_nFgCZuM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "889142678179-79qgsqodiqeq92dgieteke13ipvnnd6h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

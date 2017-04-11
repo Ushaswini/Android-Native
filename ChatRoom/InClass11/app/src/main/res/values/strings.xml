@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">InClass11</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="choose_password">Choose Password</string>
+    <string name="email">Email</string>
+    <string name="last_name">Last Name</string>
+    <string name="first_name">First Name</string>
+    <string name="cancel">Cancel</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="message">Type Message to send</string>
+</resources>
