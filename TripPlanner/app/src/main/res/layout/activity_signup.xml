@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ushaswini.tripplanner.SignupActivity">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/createNewAccount"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="18sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/et_firstName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="First Name"
+        android:inputType="textPersonName"
+        android:layout_marginTop="29dp"
+        android:layout_below="@+id/im_choose_avtar"
+        android:layout_alignLeft="@+id/et_email"
+        android:layout_alignStart="@+id/et_email" />
+
+    <EditText
+        android:id="@+id/et_lastName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/et_email"
+        android:layout_alignLeft="@+id/et_firstName"
+        android:layout_alignStart="@+id/et_firstName"
+        android:layout_marginBottom="20dp"
+        android:ems="10"
+        android:hint="Last Name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/et_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:layout_above="@+id/et_password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp" />
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/choose_password"
+        android:inputType="textPassword"
+        android:layout_above="@+id/et_confirm_password"
+        android:layout_alignLeft="@+id/et_email"
+        android:layout_alignStart="@+id/et_email"
+        android:layout_marginBottom="12dp" />
+
+    <EditText
+        android:id="@+id/et_confirm_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/confirm_password"
+        android:inputType="textPassword"
+        android:layout_above="@+id/btn_signup"
+        android:layout_alignLeft="@+id/et_password"
+        android:layout_alignStart="@+id/et_password"
+        android:layout_marginBottom="23dp" />
+
+    <Button
+        android:id="@+id/btn_signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_dark"
+        android:text="@string/signup"
+        android:textAllCaps="false"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/et_confirm_password"
+        android:layout_alignEnd="@+id/et_confirm_password"
+        android:layout_marginBottom="11dp" />
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="@android:string/cancel"
+        android:textAllCaps="false"
+        android:layout_alignBaseline="@+id/btn_signup"
+        android:layout_alignBottom="@+id/btn_signup"
+        android:layout_alignLeft="@+id/et_confirm_password"
+        android:layout_alignStart="@+id/et_confirm_password" />
+
+    <ImageButton
+        android:id="@+id/im_choose_avtar"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:background="@drawable/rounded_button"
+        android:scaleType="fitXY"
+        app:srcCompat="@mipmap/ic_launcher_round"
+        android:layout_below="@+id/tv_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp" />
+</RelativeLayout>

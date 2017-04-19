@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "802803862492",
+    "firebase_url": "https://tripplanner-aff76.firebaseio.com",
+    "project_id": "tripplanner-aff76",
+    "storage_bucket": "tripplanner-aff76.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:802803862492:android:cfe2dabc4a4a5d62",
+        "android_client_info": {
+          "package_name": "com.ushaswini.tripplanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "802803862492-dc16jac957mumn0kh0sjpn5o3dpo3bpl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ushaswini.tripplanner",
+            "certificate_hash": "270cf80bfdc04a22f2c246bc19a14ed4ec284ceb"
+          }
+        },
+        {
+          "client_id": "802803862492-m4mabg815h2c9b48d4r3sam11svrlcle.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9nXxH1MiJKthdjNXghRbMKyf4lq4XRkw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "802803862492-m4mabg815h2c9b48d4r3sam11svrlcle.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
