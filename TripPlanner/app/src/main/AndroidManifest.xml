@@ -23,7 +23,9 @@
         <activity
             android:name=".TabbedActivity"
             android:label="@string/title_activity_tabbed"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".AddTripActivity" />
+        <activity android:name=".ViewTripActivity"></activity>
     </application>
 
 </manifest>

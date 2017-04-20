@@ -14,11 +14,17 @@ import java.util.Map;
 
 public class User implements Serializable {
 
-    private String fName, lName, imageUrl,uid;
-    private ArrayList<User> friends;
-    private ArrayList<TripDetails> trips;
+    private String fName, lName, imageUrl,uid, imageUid;
+    private ArrayList<String> friendsUids;
+    private ArrayList<String> tripUids;
 
+    public String getImageUid() {
+        return imageUid;
+    }
 
+    public void setImageUid(String imageUid) {
+        this.imageUid = imageUid;
+    }
 
     public String getfName() {
         return fName;
@@ -52,20 +58,20 @@ public class User implements Serializable {
         this.uid = uid;
     }
 
-    public ArrayList<User> getFriends() {
-        return friends;
+    public ArrayList<String> getFriendsUids() {
+        return friendsUids;
     }
 
-    public void setFriends(ArrayList<User> friends) {
-        this.friends = friends;
+    public void setFriendsUids(ArrayList<String> friendsUids) {
+        this.friendsUids = friendsUids;
     }
 
-    public ArrayList<TripDetails> getTrips() {
-        return trips;
+    public ArrayList<String> getTripUids() {
+        return tripUids;
     }
 
-    public void setTrips(ArrayList<TripDetails> trips) {
-        this.trips = trips;
+    public void setTripUids(ArrayList<String> tripUids) {
+        this.tripUids = tripUids;
     }
 
     public User(String fName, String lName, String imageUrl, String uid) {
@@ -73,6 +79,22 @@ public class User implements Serializable {
         this.lName = lName;
         this.imageUrl = imageUrl;
         this.uid = uid;
+
+    }
+
+    public void addTripUid(String tripUid){
+        if(tripUids == null){
+            tripUids = new ArrayList<>();
+        }
+        tripUids.add(tripUid);
+    }
+
+    public void addFriendUid(String friendUid){
+        if(friendsUids == null){
+            friendsUids = new ArrayList<>();
+
+        }
+        friendsUids.add(friendUid);
     }
 
     public User() {
@@ -85,9 +107,23 @@ public class User implements Serializable {
         result.put("lName",lName);
         result.put("imageUrl",imageUrl);
         result.put("uid",uid);
-        result.put("friends",friends);
-        result.put("trips",trips);
+        result.put("friendsUids",friendsUids);
+        result.put("tripUids",tripUids);
+        result.put("imageUid",imageUid);
 
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "fName='" + fName + '\'' +
+                ", lName='" + lName + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", uid='" + uid + '\'' +
+                ", imageUid='" + imageUid + '\'' +
+                ", friendsUids=" + friendsUids +
+                ", tripUids=" + tripUids +
+                '}';
     }
 }

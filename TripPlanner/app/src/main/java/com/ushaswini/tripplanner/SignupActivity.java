@@ -54,8 +54,9 @@ public class SignupActivity extends AppCompatActivity {
     Button btnCancel;
     ImageButton btnChooseAvtar;
 
-    String fName,lName;
+    String fName,lName, imageUid;
     Uri imageUri;
+    Bitmap bitmap;
 
     DatabaseReference databaseReference;
 
@@ -89,16 +90,21 @@ public class SignupActivity extends AppCompatActivity {
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
+        imageUid = UUID.randomUUID().toString();
+
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 final FirebaseUser currentUser = firebaseAuth.getCurrentUser();
                 if (currentUser != null) {
+
                     UserProfileChangeRequest changeRequest = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(fName + ", " + lName)
+                            .setDisplayName(fName + "," + lName)
                             .setPhotoUri(imageUri)
                             .build();
+
+
                     currentUser.updateProfile(changeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -112,6 +118,7 @@ public class SignupActivity extends AppCompatActivity {
                                 currentUser.getPhotoUrl().toString();
                                 String user_id =  currentUser.getUid();
                                 User user = new User(fName,lName,imageUrl,user_id);
+                                user.setImageUid(imageUid);
 
                                 Map<String, Object> postValues = user.toMap();
                                 Map<String, Object> childUpdates = new HashMap<>();
@@ -120,6 +127,9 @@ public class SignupActivity extends AppCompatActivity {
                             }
                         }
                     });
+
+
+
                 }
             }
         };
@@ -151,9 +161,10 @@ public class SignupActivity extends AppCompatActivity {
                                     }else{
                                         Toast.makeText(SignupActivity.this,"Account successfully created",Toast.LENGTH_SHORT).show();
 
-                                        //TODO LOGIN ACTIVITY
                                         Intent intent = new Intent(SignupActivity.this,LoginActivity.class);
                                         startActivity(intent);
+                                        //TODO LOGIN ACTIVITY
+
                                     }
                                 }
                             });
@@ -218,13 +229,14 @@ public class SignupActivity extends AppCompatActivity {
 
 
         //TODO Round button
+        this.bitmap = bitmap;
         btnChooseAvtar.setImageBitmap(bitmap);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
         byte[] dataArray = baos.toByteArray();
 
-        StorageReference reference = storageReference.child(UUID.randomUUID().toString() + ".png");
+        StorageReference reference = storageReference.child( "profile_images/" + imageUid + ".png");
         UploadTask uploadTask = reference.putBytes(dataArray);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -236,9 +248,10 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 imageUri = taskSnapshot.getDownloadUrl();
-
             }
         });
+
+
     }
 
 }

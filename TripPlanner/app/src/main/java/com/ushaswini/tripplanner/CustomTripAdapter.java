@@ -2,21 +2,22 @@ package com.ushaswini.tripplanner;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Vinnakota Venkata Ratna Ushaswini
@@ -32,11 +33,18 @@ public class CustomTripAdapter extends ArrayAdapter<TripDetails> {
 
     int mResource;
 
-    public CustomTripAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull ArrayList<TripDetails> tripDetails) {
+    boolean isNew;
+
+    String Organizer_id;
+
+
+    public CustomTripAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull ArrayList<TripDetails> tripDetails, boolean isNew, String Organizer_id) {
         super(context, resource, tripDetails);
         this.trips = tripDetails;
         this.mContext = context;
         this.mResource = resource;
+        this.isNew = isNew;
+        this.Organizer_id = Organizer_id;
 
     }
 
@@ -56,6 +64,7 @@ public class CustomTripAdapter extends ArrayAdapter<TripDetails> {
             holder.tv_title = (TextView) convertView.findViewById(R.id.tv_title_trip);
             holder.tv_location = (TextView)convertView.findViewById(R.id.tv_location);
             holder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
+            holder.button = (Button) convertView.findViewById(R.id.btn_view);
 
             convertView.setTag(holder);
         }
@@ -64,9 +73,34 @@ public class CustomTripAdapter extends ArrayAdapter<TripDetails> {
         TextView title = holder.tv_title;
         TextView location = holder.tv_location;
         ImageView imageView = holder.imageView;
+        Button btn = holder.button;
+
         title.setText(trip.getTitle());
         location.setText(trip.getLocation());
         Picasso.with(mContext).load(trip.getImageUrl()).into(imageView);
+
+        if(isNew){
+            btn.setText("JOIN");
+        }else{
+            btn.setText("VIEW");
+        }
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(isNew){
+                    //TODO Show alert dialog
+                }else{
+                    Log.d("demo in adapter",Organizer_id);
+                    Intent intent = new Intent(mContext,ViewTripActivity.class);
+                    intent.putExtra("Organizer_id",Organizer_id);
+                    mContext.startActivity(intent);
+                }
+
+            }
+        });
+
 
 
 
@@ -88,4 +122,5 @@ class ViewHolder{
     TextView tv_title;
     TextView tv_location;
     ImageView imageView;
+    Button button;
 }
