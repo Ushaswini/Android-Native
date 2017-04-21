@@ -7,53 +7,73 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <TextView
-        android:id="@+id/tv_message"
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"
-        android:text="Message"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="18sp"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/colourMyMessage">
 
-    <TextView
-        android:id="@+id/time_m"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_message"
-        android:layout_marginLeft="17dp"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="15dp"
-        android:layout_toEndOf="@+id/tv_message"
-        android:layout_toRightOf="@+id/tv_message"
-        android:text="Time"
-        android:textAlignment="textEnd"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="14sp"
-        android:textStyle="italic" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colourMyMessage">
+
+            <ImageButton
+                android:id="@+id/im_comment_m"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_comment"
+                android:layout_above="@+id/time_m"
+                android:layout_alignLeft="@+id/time_m"
+                android:layout_alignStart="@+id/time_m" />
+
+            <TextView
+                android:id="@+id/tv_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="13dp"
+                android:layout_marginStart="13dp"
+                android:text="Message"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/time_m"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_message"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="15dp"
+                android:layout_toEndOf="@+id/tv_message"
+                android:layout_toRightOf="@+id/tv_message"
+                android:text="Time"
+                android:textAlignment="textEnd"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="14sp"
+                android:textStyle="italic" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
 
     <LinearLayout
         android:id="@+id/list_comments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/time_m"
-        android:layout_marginTop="17dp"
-        android:layout_toEndOf="@+id/time_m"
-        android:layout_toRightOf="@+id/time_m"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/cardView"
+        android:layout_marginLeft="101dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical"></LinearLayout>
 
-    <ImageButton
-        android:id="@+id/im_comment_m"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tv_message"
-        android:layout_alignLeft="@+id/time_m"
-        android:layout_alignStart="@+id/time_m"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
-        android:background="@drawable/ic_comment" />
 </RelativeLayout>

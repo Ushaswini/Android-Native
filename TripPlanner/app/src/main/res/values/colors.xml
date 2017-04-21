@@ -3,4 +3,6 @@
     <color name="colorPrimary">#0099cc</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorFriendMessage">#ffffed</color>
+    <color name="colourMyMessage">#98fb98</color>
 </resources>

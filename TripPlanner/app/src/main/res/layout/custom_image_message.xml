@@ -6,49 +6,63 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_marginLeft="17dp"
-        android:layout_marginStart="17dp"
-        android:background="@drawable/ic_insert_photo"
-        android:scaleType="fitXY"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:id="@+id/time_i"
+    <android.support.v7.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/image"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="11dp"
-        android:layout_toEndOf="@+id/image"
-        android:layout_toRightOf="@+id/image"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="14sp"
-        android:textStyle="italic" />
+        android:background="@color/colourMyMessage"
+        android:id="@+id/cardView2">
 
-    <ImageButton
-        android:id="@+id/im_comment_i"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/image"
-        android:layout_toEndOf="@+id/time_i"
-        android:layout_toRightOf="@+id/time_i"
-        android:background="@drawable/ic_comment" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colourMyMessage">
+
+            <ImageButton
+                android:id="@+id/im_comment_i"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="11dp"
+                android:layout_marginStart="11dp"
+                android:layout_toRightOf="@+id/image"
+                android:background="@drawable/ic_comment" />
+
+            <TextView
+                android:id="@+id/time_i"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/im_comment_i"
+                android:layout_alignStart="@+id/im_comment_i"
+                android:text="TextView"
+                android:textAlignment="textEnd"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                android:layout_below="@+id/image" />
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/ic_insert_photo"
+                android:scaleType="fitXY" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
     <LinearLayout
         android:id="@+id/list_comments_i"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/time_i"
-        android:layout_toEndOf="@+id/im_comment_i"
-        android:layout_toRightOf="@+id/im_comment_i"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/cardView2"
+        android:layout_marginLeft="90dp"
+        android:layout_marginStart="90dp"
+        android:layout_marginTop="12dp"
         android:orientation="vertical"></LinearLayout>
 
 </RelativeLayout>

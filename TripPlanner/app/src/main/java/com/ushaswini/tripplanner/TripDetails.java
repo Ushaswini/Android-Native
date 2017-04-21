@@ -16,6 +16,16 @@ public class TripDetails {
 
     ArrayList<String> friendsUids;
 
+    ArrayList<MessageDetails> messages;
+
+    public ArrayList<MessageDetails> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(ArrayList<MessageDetails> messages) {
+        this.messages = messages;
+    }
+
     public ArrayList<String> getFriendsUids() {
         return friendsUids;
     }
@@ -79,6 +89,13 @@ public class TripDetails {
         friendsUids.add(friendUid);
     }
 
+    public void addMessage (MessageDetails message){
+        if(messages == null){
+            messages = new ArrayList<>();
+        }
+        messages.add(message);
+    }
+
     public TripDetails() {
     }
 
@@ -100,7 +117,8 @@ public class TripDetails {
         result.put("trip_id",trip_id);
         result.put("description",location);
         result.put("organizer_id",organizer_id);
-        result.put("friends",friendsUids);
+        result.put("friendsUids",friendsUids);
+        result.put("messages",messages);
 
 
         return result;

@@ -36,17 +36,21 @@ public class TripsTab extends Fragment {
     User currentUser;
 
     FloatingActionButton addTrip;
+
     ListView lv_your_trips;
     ListView lv_friend_trips;
+
     CustomTripAdapter your_adapter;
+    CustomTripAdapter friend_adapter;
 
     private TripListner mListener;
 
     ArrayList<TripDetails> your_trips;
-    DatabaseReference databaseReference;
+    ArrayList<TripDetails> friends_trips;
+    ArrayList<TripDetails> listOfTrips;
 
-    DatabaseReference yourTripsReference;
-    DatabaseReference otherTripsReference;
+
+    DatabaseReference tripsDatabaseReference;
     String uid = "";
 
 
@@ -64,13 +68,13 @@ public class TripsTab extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         your_trips = new ArrayList<>();
+        friends_trips = new ArrayList<>();
+        listOfTrips = new ArrayList<>();
 
         addTrip = (FloatingActionButton) getView().findViewById(R.id.fab);
         lv_your_trips = (ListView) getView().findViewById(R.id.your_trips);
         lv_friend_trips = (ListView) getView().findViewById(R.id.friends_trips);
 
-
-       // Log.d("demo",currentUser.getUid().toString());
 
         uid = currentUser.getUid().toString();
 
@@ -78,52 +82,34 @@ public class TripsTab extends Fragment {
         lv_your_trips.setAdapter(your_adapter);
         your_adapter.setNotifyOnChange(true);
 
+        friend_adapter = new CustomTripAdapter(getContext(),R.layout.custom_trip_row,friends_trips,true,uid);
+        lv_friend_trips.setAdapter(friend_adapter);
+        friend_adapter.setNotifyOnChange(true);
+
         addTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
             mListener.addTrip();
             }
         });
-        databaseReference = FirebaseDatabase.getInstance().getReference();
 
 
-        yourTripsReference = FirebaseDatabase.getInstance().getReference("users/" + currentUser.getUid() + "/trips");
+        tripsDatabaseReference = FirebaseDatabase.getInstance().getReference("trips");
 
-        yourTripsReference.addValueEventListener(new ValueEventListener() {
+        tripsDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("trips",dataSnapshot.toString());
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
                 your_trips.clear();
+                friends_trips.clear();
+                listOfTrips.clear();
 
-                Log.d("demo",dataSnapshot.child("trips").toString());
-                if(dataSnapshot.child("trips").getChildrenCount() > 0){
-
-                    for(DataSnapshot data : dataSnapshot.child("trips").getChildren()){
-
-                        TripDetails trip = data.getValue(TripDetails.class);
-                        Log.d("demo",trip.toString());
-
-                        your_trips.add(trip);
-                    }
-
-                    your_adapter.notifyDataSetChanged();
-
+                for(DataSnapshot data : dataSnapshot.getChildren()){
+                    TripDetails trip = data.getValue(TripDetails.class);
+                    listOfTrips.add(trip);
 
                 }
+                separateListOfTrips();
             }
 
             @Override
@@ -131,6 +117,19 @@ public class TripsTab extends Fragment {
 
             }
         });
+    }
+
+    private void separateListOfTrips(){
+        for(TripDetails trip : listOfTrips){
+            if(trip.getFriendsUids().contains(uid)){
+                your_trips.add(trip);
+            }else{
+                friends_trips.add(trip);
+            }
+        }
+
+        your_adapter.notifyDataSetChanged();
+        friend_adapter.notifyDataSetChanged();
     }
 
     @Override

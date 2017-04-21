@@ -94,7 +94,7 @@ public class CustomTripAdapter extends ArrayAdapter<TripDetails> {
                 }else{
                     Log.d("demo in adapter",Organizer_id);
                     Intent intent = new Intent(mContext,ViewTripActivity.class);
-                    intent.putExtra("Organizer_id",Organizer_id);
+                    intent.putExtra("trip_id",trip.getTrip_id());
                     mContext.startActivity(intent);
                 }
 

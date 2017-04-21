@@ -40,11 +40,14 @@ import java.util.UUID;
 
 public class SignupActivity extends AppCompatActivity {
 
+    final int ACTIVITY_SELECT_IMAGE = 1234;
+
     FirebaseAuth mFirebaseAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
-
     FirebaseStorage storage;
     StorageReference storageReference;
+    DatabaseReference databaseReference;
+
     EditText etFName;
     EditText etLName;
     EditText etEmail;
@@ -58,11 +61,61 @@ public class SignupActivity extends AppCompatActivity {
     Uri imageUri;
     Bitmap bitmap;
 
-    DatabaseReference databaseReference;
+
+    View.OnClickListener signUp_click_listner = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final String  email,choose_password, repeat_password;
+            fName = etFName.getText().toString();
+            lName = etLName.getText().toString();
+            email = etEmail.getText().toString();
+            choose_password = etChoosePassword.getText().toString();
+            repeat_password = etRepeatPassword.getText().toString();
+
+            if(fName.equals("") || lName.equals("") || email.equals("") ||choose_password.equals("") || repeat_password.equals("")){
+                Toast.makeText(SignupActivity.this,"Enter all details",Toast.LENGTH_SHORT).show();
+            }else{
+                if(!choose_password.equals(repeat_password)){
+                    Toast.makeText(SignupActivity.this,"Passwords don't match",Toast.LENGTH_SHORT).show();
+                }else {
+
+                    mFirebaseAuth.createUserWithEmailAndPassword(email,choose_password)
+                            .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if(!task.isSuccessful()){
+                                        Toast.makeText(SignupActivity.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toast.makeText(SignupActivity.this,"Account successfully created",Toast.LENGTH_SHORT).show();
+
+                                        Intent intent = new Intent(SignupActivity.this,LoginActivity.class);
+                                        startActivity(intent);
+                                        //TODO LOGIN ACTIVITY
+
+                                    }
+                                }
+                            });
+                }
+            }
 
 
-    final int ACTIVITY_SELECT_IMAGE = 1234;
-
+        }
+    };
+    View.OnClickListener cancel_click_listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            finish();
+        }
+    };
+    View.OnClickListener choose_avtar_click_listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);//
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"),ACTIVITY_SELECT_IMAGE);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +162,6 @@ public class SignupActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
-                                Log.d("Demo","Upadted");
                                 String displayName = currentUser.getDisplayName();
                                 String[] names = displayName.split(",");
                                 String fName = names[0];
@@ -134,64 +186,6 @@ public class SignupActivity extends AppCompatActivity {
             }
         };
     }
-
-    View.OnClickListener signUp_click_listner = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            final String  email,choose_password, repeat_password;
-            fName = etFName.getText().toString();
-            lName = etLName.getText().toString();
-            email = etEmail.getText().toString();
-            choose_password = etChoosePassword.getText().toString();
-            repeat_password = etRepeatPassword.getText().toString();
-
-            if(fName.equals("") || lName.equals("") || email.equals("") ||choose_password.equals("") || repeat_password.equals("")){
-                Toast.makeText(SignupActivity.this,"Enter all details",Toast.LENGTH_SHORT).show();
-            }else{
-                if(!choose_password.equals(repeat_password)){
-                    Toast.makeText(SignupActivity.this,"Passwords don't match",Toast.LENGTH_SHORT).show();
-                }else {
-
-                    mFirebaseAuth.createUserWithEmailAndPassword(email,choose_password)
-                            .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if(!task.isSuccessful()){
-                                        Toast.makeText(SignupActivity.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        Toast.makeText(SignupActivity.this,"Account successfully created",Toast.LENGTH_SHORT).show();
-
-                                        Intent intent = new Intent(SignupActivity.this,LoginActivity.class);
-                                        startActivity(intent);
-                                        //TODO LOGIN ACTIVITY
-
-                                    }
-                                }
-                            });
-                }
-            }
-
-
-        }
-    };
-
-    View.OnClickListener cancel_click_listener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            finish();
-        }
-    };
-
-    View.OnClickListener choose_avtar_click_listener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);//
-            startActivityForResult(Intent.createChooser(intent, "Select Picture"),ACTIVITY_SELECT_IMAGE);
-        }
-    };
-
 
     @Override
     protected void onStart() {

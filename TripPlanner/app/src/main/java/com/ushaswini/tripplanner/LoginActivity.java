@@ -23,24 +23,6 @@ public class LoginActivity extends AppCompatActivity {
 
     FirebaseAuth mFirebaseAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        mFirebaseAuth = FirebaseAuth.getInstance();
-
-
-        etEmail = (EditText) findViewById(R.id.et_email);
-        etPassword = (EditText) findViewById(R.id.et_password);
-        btnLogin = (Button) findViewById(R.id.btn_login);
-        btnCreateNewAccount = (Button) findViewById(R.id.btn_create_new_account);
-
-        btnLogin.setOnClickListener(login_listener);
-        btnCreateNewAccount.setOnClickListener(signup_listener);
-    }
-
     View.OnClickListener login_listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -67,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     };
-
     View.OnClickListener signup_listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -75,4 +56,21 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         }
     };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+
+
+        etEmail = (EditText) findViewById(R.id.et_email);
+        etPassword = (EditText) findViewById(R.id.et_password);
+        btnLogin = (Button) findViewById(R.id.btn_login);
+        btnCreateNewAccount = (Button) findViewById(R.id.btn_create_new_account);
+
+        btnLogin.setOnClickListener(login_listener);
+        btnCreateNewAccount.setOnClickListener(signup_listener);
+    }
 }
