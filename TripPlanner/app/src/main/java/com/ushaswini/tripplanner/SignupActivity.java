@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -56,10 +58,12 @@ public class SignupActivity extends AppCompatActivity {
     Button btnSignup;
     Button btnCancel;
     ImageButton btnChooseAvtar;
+    RadioGroup genderRadioGroup;
 
     String fName,lName, imageUid;
     Uri imageUri;
     Bitmap bitmap;
+    User.GENDER gender;
 
 
     View.OnClickListener signUp_click_listner = new View.OnClickListener() {
@@ -135,6 +139,7 @@ public class SignupActivity extends AppCompatActivity {
         btnSignup = (Button) findViewById(R.id.btn_signup);
         btnCancel = (Button) findViewById(R.id.btn_cancel);
         btnChooseAvtar = (ImageButton) findViewById(R.id.im_choose_avtar);
+        genderRadioGroup = (RadioGroup) findViewById(R.id.genderRadioGroup);
 
 
         btnSignup.setOnClickListener(signUp_click_listner);
@@ -144,6 +149,16 @@ public class SignupActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         imageUid = UUID.randomUUID().toString();
+
+        genderRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                switch(checkedId){
+                    case R.id.male: gender = User.GENDER.MALE;break;
+                    case R.id.female: gender = User.GENDER.FEMALE;break;
+                }
+            }
+        });
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -171,6 +186,7 @@ public class SignupActivity extends AppCompatActivity {
                                 String user_id =  currentUser.getUid();
                                 User user = new User(fName,lName,imageUrl,user_id);
                                 user.setImageUid(imageUid);
+                                user.setGender(gender);
 
                                 Map<String, Object> postValues = user.toMap();
                                 Map<String, Object> childUpdates = new HashMap<>();

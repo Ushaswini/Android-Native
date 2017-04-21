@@ -16,5 +16,11 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="trips">Your trips</string>
     <string name="friends_trips">Your friends trips</string>
+    <string name="last_name">Your last name</string>
+    <string name="first_name">Your first name</string>
+    <string name="new_password">New Password</string>
+    <string name="your_password">Your Password</string>
+    <string name="your_friends">Your Friends</string>
+    <string name="add_friends">Add Friends</string>
 
 </resources>

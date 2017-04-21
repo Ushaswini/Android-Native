@@ -15,8 +15,28 @@ import java.util.Map;
 public class User implements Serializable {
 
     private String fName, lName, imageUrl,uid, imageUid;
+
     private ArrayList<String> friendsUids;
+
+    private ArrayList<String> receivedFriendRequestUids;
+
+    private ArrayList<String> sentFriendRequestUids;
+
     private ArrayList<String> tripUids;
+
+    enum GENDER{
+        MALE , FEMALE;
+    }
+
+    GENDER gender;
+
+    public GENDER getGender() {
+        return gender;
+    }
+
+    public void setGender(GENDER gender) {
+        this.gender = gender;
+    }
 
     public String getImageUid() {
         return imageUid;
@@ -97,6 +117,20 @@ public class User implements Serializable {
         friendsUids.add(friendUid);
     }
 
+    public void addToSentFriendRequestUid(String friendUid){
+        if(sentFriendRequestUids == null){
+            sentFriendRequestUids = new ArrayList<>();
+        }
+        sentFriendRequestUids.add(friendUid);
+    }
+
+    public void addToReceivedFriendRequestUid(String friendUid){
+        if(receivedFriendRequestUids == null){
+            receivedFriendRequestUids = new ArrayList<>();
+        }
+        receivedFriendRequestUids.add(friendUid);
+    }
+
     public User() {
     }
 
@@ -110,6 +144,9 @@ public class User implements Serializable {
         result.put("friendsUids",friendsUids);
         result.put("tripUids",tripUids);
         result.put("imageUid",imageUid);
+        result.put("gender",gender);
+        result.put("sentFriendRequestUids",sentFriendRequestUids);
+        result.put("receivedFriendRequestUids",receivedFriendRequestUids);
 
         return result;
     }

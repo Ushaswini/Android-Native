@@ -39,7 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ViewTripActivity extends AppCompatActivity implements ChatAdapter.IShareData{
+public class ViewTripActivity extends AppCompatActivity implements AdapterChat.IShareData{
 
     ImageView imCoverPhoto;
     TextView tvTripDetails;
@@ -59,12 +59,13 @@ public class ViewTripActivity extends AppCompatActivity implements ChatAdapter.I
     final int ACTIVITY_SELECT_IMAGE = 1234;
 
     ArrayList<MessageDetails> messages ;
-    ChatAdapter chatAdapter;
+    AdapterChat adapterChat;
 
     TripDetails currentTrip;
 
     String userUid;
     String tripId;
+    boolean isMemberOf;
     String userDisplayName;
 
 
@@ -95,19 +96,19 @@ public class ViewTripActivity extends AppCompatActivity implements ChatAdapter.I
             tripId = getIntent().getExtras().getString("trip_id");
         }
 
+        if(getIntent().getExtras().containsKey("isMemberOf")){
+            isMemberOf = (boolean) getIntent().getExtras().get("isMemberOf");
+        }
+
 
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         userDisplayName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
 
-
-
-
-
-        chatAdapter = new ChatAdapter(this,R.layout.custom_image_message,messages);
-        lvChats.setAdapter(chatAdapter);
-        chatAdapter.setNotifyOnChange(true);
+        adapterChat = new AdapterChat(this,R.layout.custom_image_message,messages);
+        lvChats.setAdapter(adapterChat);
+        adapterChat.setNotifyOnChange(true);
     }
 
 
@@ -115,49 +116,44 @@ public class ViewTripActivity extends AppCompatActivity implements ChatAdapter.I
     protected void onStart() {
         super.onStart();
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                messages.clear();
-                ArrayList<MessageDetails> data = new ArrayList<MessageDetails>();
 
-                if(dataSnapshot.child("trips").child(tripId).child("messages").exists()){
-                    for (DataSnapshot snapshot: dataSnapshot.child("trips").child(tripId).child("messages").getChildren()) {
-                        Log.d("data",snapshot.getValue(MessageDetails.class).toString());
-                        data.add(snapshot.getValue(MessageDetails.class));
+        databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    messages.clear();
+                    ArrayList<MessageDetails> data = new ArrayList<MessageDetails>();
+
+                    if(dataSnapshot.child("trips").child(tripId).child("messages").exists()){
+                        for (DataSnapshot snapshot: dataSnapshot.child("trips").child(tripId).child("messages").getChildren()) {
+                            Log.d("data",snapshot.getValue(MessageDetails.class).toString());
+                            data.add(snapshot.getValue(MessageDetails.class));
+                        }
+
+                        messages.addAll(data);
+                        adapterChat.notifyDataSetChanged();
+
+
                     }
 
-                    messages.addAll(data);
-                    chatAdapter.notifyDataSetChanged();
+                    if(dataSnapshot.child("trips").child(tripId).exists()){
+                        currentTrip = dataSnapshot.child("trips").child(tripId).getValue(TripDetails.class);
+                        Picasso.with(ViewTripActivity.this).load(currentTrip.getImageUrl()).into(imCoverPhoto);
+                        tvTripDetails.setText(currentTrip.getTitle());
+
+
+                    }
 
 
                 }
 
-                if(dataSnapshot.child("trips").child(tripId).exists()){
-                    currentTrip = dataSnapshot.child("trips").child(tripId).getValue(TripDetails.class);
-                    Picasso.with(ViewTripActivity.this).load(currentTrip.getImageUrl()).into(imCoverPhoto);
-                    tvTripDetails.setText(currentTrip.getTitle());
-
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
                 }
+            });
 
-                /*if(dataSnapshot.child("trips").child(tripId).child("imageUrl").getValue() != null){
-                    String url = (String) dataSnapshot.child("trips").child(tripId).child("imageUrl").getValue();
-                    Picasso.with(ViewTripActivity.this).load(url).into(imCoverPhoto);
 
-                }
 
-                if(dataSnapshot.child("trips").child(tripId).child("title").getValue() != null){
-                    String details = (String) dataSnapshot.child("trips").child(tripId).child("title").getValue();
-                    tvTripDetails.setText(details);
-                }*/
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
 
@@ -177,6 +173,8 @@ public class ViewTripActivity extends AppCompatActivity implements ChatAdapter.I
             Map<String, Object> childUpdates = new HashMap<>();
             childUpdates.put("/trips/" +tripId ,postValues);
             databaseReference.updateChildren(childUpdates);
+
+            etMessage.setText("");
 
 
         }

@@ -21,24 +21,28 @@
                 android:id="@+id/im_comment_i"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="11dp"
-                android:layout_marginStart="11dp"
-                android:layout_toRightOf="@+id/image"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/ic_comment" />
 
             <TextView
                 android:id="@+id/time_i"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/im_comment_i"
-                android:layout_alignStart="@+id/im_comment_i"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/image"
+                android:layout_marginEnd="5dp"
                 android:text="TextView"
                 android:textAlignment="textEnd"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="14sp"
-                android:textStyle="italic"
-                android:layout_below="@+id/image" />
+                android:textStyle="italic" />
 
             <ImageView
                 android:id="@+id/image"

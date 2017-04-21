@@ -16,36 +16,40 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
+        android:background="@drawable/ic_person"
         app:srcCompat="@drawable/rounded_button" />
 
     <EditText
         android:id="@+id/et_first_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/im_change_image"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="26dp"
         android:ems="10"
-        android:inputType="textPersonName" />
+        android:hint="@string/first_name"
+        android:inputType="textPersonName"
+        android:layout_below="@+id/im_change_image"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:id="@+id/et_last_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:layout_below="@+id/et_first_name"
         android:layout_alignLeft="@+id/et_first_name"
         android:layout_alignStart="@+id/et_first_name"
-        android:layout_marginTop="18dp" />
+        android:layout_below="@+id/et_first_name"
+        android:layout_marginTop="18dp"
+        android:ems="10"
+        android:hint="@string/last_name"
+        android:inputType="textPersonName" />
 
     <Button
         android:id="@+id/btn_save"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
         android:background="@color/colorPrimary"
         android:text="SAVE CHANGES"
-        android:layout_marginBottom="24dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
@@ -53,13 +57,13 @@
         android:id="@+id/et_newPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/et_password"
-        android:layout_alignStart="@+id/et_password"
-        android:layout_below="@+id/et_password"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="14dp"
         android:ems="10"
-        android:hint="Change Password"
-        android:inputType="textPersonName" />
+        android:hint="@string/new_password"
+        android:inputType="textPersonName"
+        android:layout_below="@+id/et_password"
+        android:layout_alignLeft="@+id/et_password"
+        android:layout_alignStart="@+id/et_password" />
 
     <EditText
         android:id="@+id/et_password"
@@ -70,6 +74,34 @@
         android:layout_below="@+id/et_last_name"
         android:layout_marginTop="10dp"
         android:ems="10"
-        android:hint="Enter Password"
+        android:hint="@string/your_password"
         android:inputType="textPersonName" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/et_newPassword"
+        android:layout_alignLeft="@+id/et_newPassword"
+        android:layout_alignRight="@+id/et_newPassword"
+        android:layout_alignStart="@+id/et_newPassword"
+        android:layout_below="@+id/et_newPassword"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/male"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Male" />
+
+        <RadioButton
+            android:id="@+id/female"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Female" />
+    </RadioGroup>
+
 </RelativeLayout>

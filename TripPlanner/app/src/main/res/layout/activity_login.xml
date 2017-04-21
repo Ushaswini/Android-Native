@@ -43,6 +43,7 @@
 
     <Button
         android:id="@+id/btn_login"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/et_password"
@@ -54,15 +55,16 @@
 
     <Button
         android:id="@+id/btn_create_new_account"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/et_password"
+        android:layout_alignLeft="@+id/et_password"
         android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/et_password"
+        android:layout_alignStart="@+id/et_password"
         android:layout_marginBottom="31dp"
         android:background="@android:color/holo_blue_dark"
         android:text="@string/createNewAccount"
-        android:textAllCaps="false"
-        android:layout_alignLeft="@+id/et_password"
-        android:layout_alignStart="@+id/et_password"
-        android:layout_alignRight="@+id/et_password"
-        android:layout_alignEnd="@+id/et_password" />
+        android:textAllCaps="false" />
 </RelativeLayout>

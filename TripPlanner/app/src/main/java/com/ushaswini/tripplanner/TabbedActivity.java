@@ -6,8 +6,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +16,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import android.widget.Toast;
 
@@ -44,7 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TabbedActivity extends AppCompatActivity implements SettingsTab.handleSaveChanges, TripsTab.TripListner{
+public class TabbedActivity extends AppCompatActivity implements TabSettings.handleSaveChanges, TabTrips.TripListner{
 
 
     final int ACTIVITY_SELECT_IMAGE = 1234;
@@ -58,10 +57,10 @@ public class TabbedActivity extends AppCompatActivity implements SettingsTab.han
     TabLayout tabLayout;
     Uri imageUri;
     String fName,lName;
-    FriendsTab friendsTab;
-    SettingsTab settingsTab;
-    TripsTab tripsTab;
-    NotificationsTab notificationsTab;
+    TabFriends tabFriends;
+    TabSettings tabSettings;
+    TabTrips tabTrips;
+    TabNotifications tabNotifications;
     ArrayList<TripDetails> trips;
     ArrayList<User> friends;
     String currentUserUid;
@@ -98,6 +97,20 @@ public class TabbedActivity extends AppCompatActivity implements SettingsTab.han
 
         trips = new ArrayList<>();
 
+        currentUser = mFirebaseAuth.getCurrentUser();
+
+        if(currentUser != null){
+            currentUserUid = currentUser.getUid();
+
+            String displayName = currentUser.getDisplayName();
+            String[] names = displayName.split(",");
+            String fName = names[0];
+            String lName = names[1];
+            String imageUrl = currentUser.getPhotoUrl().toString();
+            String user_id = currentUser.getUid();
+            user = new User(fName,lName,imageUrl,user_id);
+        }
+
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -106,15 +119,19 @@ public class TabbedActivity extends AppCompatActivity implements SettingsTab.han
 
                 currentUser = firebaseAuth.getCurrentUser();
 
-                currentUserUid = currentUser.getUid();
+                if(currentUser != null){
+                    currentUserUid = currentUser.getUid();
 
-                String displayName = currentUser.getDisplayName();
-                String[] names = displayName.split(",");
-                String fName = names[0];
-                String lName = names[1];
-                String imageUrl = currentUser.getPhotoUrl().toString();
-                String user_id = currentUser.getUid();
-                user = new User(fName,lName,imageUrl,user_id);
+                    String displayName = currentUser.getDisplayName();
+                    String[] names = displayName.split(",");
+                    String fName = names[0];
+                    String lName = names[1];
+                    String imageUrl = currentUser.getPhotoUrl().toString();
+                    String user_id = currentUser.getUid();
+                    user = new User(fName,lName,imageUrl,user_id);
+                }
+
+
 
             }
         };
@@ -123,10 +140,13 @@ public class TabbedActivity extends AppCompatActivity implements SettingsTab.han
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(dataSnapshot.child("users").child(currentUserUid).exists()){
-                    user = dataSnapshot.child("users").child(currentUserUid).getValue(User.class);
-                    Log.d("user",user.toString());
+                if(currentUserUid != null){
+                    if(dataSnapshot.child("users").child(currentUserUid).exists()){
+                        user = dataSnapshot.child("users").child(currentUserUid).getValue(User.class);
+                        Log.d("user",user.toString());
+                    }
                 }
+
             }
 
             @Override
@@ -134,6 +154,21 @@ public class TabbedActivity extends AppCompatActivity implements SettingsTab.han
 
             }
         });
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_tabbed, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        FirebaseAuth.getInstance().signOut();
+        Intent i=new Intent(TabbedActivity.this,LoginActivity.class);
+        startActivity(i);
+        return true;
     }
 
     @Override
@@ -157,24 +192,26 @@ public class TabbedActivity extends AppCompatActivity implements SettingsTab.han
     }
 
     @Override
-    public void saveNameChanges(final String fName, final String lName) {
+    public void saveChanges(final String fName, final String lName, String oldPassword, String newPassword, final User.GENDER gender) {
         this.fName = fName;
         this.lName = lName;
         UserProfileChangeRequest changeRequest = new UserProfileChangeRequest.Builder()
                 .setDisplayName(fName + ", " + lName)
-
                 .build();
-        currentUser.updateProfile(changeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                currentUser.updateProfile(changeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
 
                     user.setfName(fName);
                     user.setlName(lName);
+                    user.setGender(gender);
 
                     Map<String, Object> childUpdates = new HashMap<>();
                     childUpdates.put("/users/" + currentUserUid + "/fName" ,fName);
                     childUpdates.put("/users/" + currentUserUid + "/lName",lName);
+                    childUpdates.put("/users/" + currentUserUid + "/gender", gender);
 
                     databaseReference.updateChildren(childUpdates);
 
@@ -184,6 +221,8 @@ public class TabbedActivity extends AppCompatActivity implements SettingsTab.han
             }
         });
     }
+
+
 
 
     @Override
@@ -237,7 +276,7 @@ public class TabbedActivity extends AppCompatActivity implements SettingsTab.han
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
 
-                            settingsTab.postCurrentUserImage(imageUri.toString());
+                            tabSettings.postCurrentUserImage(imageUri.toString());
                             user.setImageUrl(taskSnapshot.getDownloadUrl().toString());
 
                             Map<String, Object> childUpdates = new HashMap<>();
@@ -279,21 +318,22 @@ public class TabbedActivity extends AppCompatActivity implements SettingsTab.han
 
 
             switch(position){
-                case 0: friendsTab = new FriendsTab();
-                    return friendsTab;
+                case 0: tabFriends = new TabFriends();
+                    tabFriends.setArguments(bundle);
+                    return tabFriends;
 
                 case 1: {
-                    tripsTab = new TripsTab();
-                    tripsTab.setArguments(bundle);
-                    return tripsTab;
+                    tabTrips = new TabTrips();
+                    tabTrips.setArguments(bundle);
+                    return tabTrips;
 
                 }
-                case 2: notificationsTab  = new NotificationsTab();
-                    return notificationsTab;
+                case 2: tabNotifications = new TabNotifications();
+                    return tabNotifications;
                 case 3: {
-                    settingsTab = new SettingsTab();
-                    settingsTab.setArguments(bundle);
-                    return settingsTab;
+                    tabSettings = new TabSettings();
+                    tabSettings.setArguments(bundle);
+                    return tabSettings;
                 }
 
                 default: return null;
@@ -305,5 +345,7 @@ public class TabbedActivity extends AppCompatActivity implements SettingsTab.han
             // Show 4 total pages.
             return 4;
         }
+
+
     }
 }
