@@ -106,7 +106,8 @@ public class AddTripActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
-        setContentView(R.layout.activity_add_event);
+
+        setTitle("Add Trip");
 
         imCoverPhoto = (ImageButton)findViewById(R.id.im_coverphoto);
         btnCreate = (Button) findViewById(R.id.btn_create);

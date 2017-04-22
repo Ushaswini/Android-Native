@@ -32,21 +32,23 @@ public class AdapterFriends extends ArrayAdapter<User> {
 
     int mResource;
 
-    boolean isFriend;
 
-    public AdapterFriends(@NonNull Context context, @LayoutRes int resource, @NonNull ArrayList<User> objects, boolean isFriend) {
+    IHandleConnect iHandleConnect;
+
+
+    public AdapterFriends(@NonNull Context context, @LayoutRes int resource, @NonNull ArrayList<User> objects) {
         super(context, resource, objects);
         this.mContext = context;
         this.friends = objects;
         this.mResource = resource;
-        this.isFriend = isFriend;
+        this.iHandleConnect = (IHandleConnect) context;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        User friend = friends.get(position);
+        final User friend = friends.get(position);
         ViewHolder_Friend holder;
 
         if(convertView == null){
@@ -65,7 +67,7 @@ public class AdapterFriends extends ArrayAdapter<User> {
         holder = (ViewHolder_Friend) convertView.getTag();
         TextView title = holder.textView;
         ImageView imageView = holder.imageView;
-        ImageButton imageButton = holder.imageButton;
+        final ImageButton imageButton = holder.imageButton;
 
         String details = friend.getfName() + "," + friend.getlName() + "\n" + friend.getGender();
 
@@ -73,13 +75,68 @@ public class AdapterFriends extends ArrayAdapter<User> {
         Picasso.with(mContext).load(friend.getImageUrl()).into(imageView);
 
 
-        if(isFriend){
-            imageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_search));
+        switch (friend.getStatus()){
+            case FRIEND: imageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_friend));
+                break;
+            case SENT: imageButton.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.ic_sent));
+                break;
+            case RECEIVED:imageButton.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.ic_receive));
+                break;
+            case UNCONNECTED: imageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_person_add));
+                break;
+
+        }
+        /*if(isFriend){
+            imageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_friend));
             //TODO show profile
         }else{
             imageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_person_add));
-        }
+        }*/
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                switch (friend.getStatus()){
+                    case FRIEND: {
+                        iHandleConnect.removeFriend(friend);
+                        break;
+
+                    }
+                    case SENT:
+                        {
+                        iHandleConnect.displaySentMessage();
+                        break;
+
+                    }
+                    case RECEIVED:{
+                        iHandleConnect.displayReceivedMessage(friend);
+                        imageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_friend));
+                        break;
+                    }
+
+                    case UNCONNECTED:
+                        {
+                            iHandleConnect.addFriend(friend);
+                            imageButton.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.ic_sent));
+                            break;
+
+
+                        }
+
+
+                }
+                //change icon
+            }
+        });
 
         return convertView;
+    }
+
+    interface IHandleConnect{
+        void addFriend(User user);
+        void displayReceivedMessage(User friend);
+        void displaySentMessage();
+        void removeFriend(User user);
     }
 }

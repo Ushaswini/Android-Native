@@ -91,9 +91,12 @@ public class SignupActivity extends AppCompatActivity {
                                         Toast.makeText(SignupActivity.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
                                     }else{
                                         Toast.makeText(SignupActivity.this,"Account successfully created",Toast.LENGTH_SHORT).show();
+                                        FirebaseAuth.getInstance().signOut();
 
                                         Intent intent = new Intent(SignupActivity.this,LoginActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         startActivity(intent);
+
                                         //TODO LOGIN ACTIVITY
 
                                     }
@@ -125,6 +128,8 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        setTitle("Sign Up");
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
@@ -177,26 +182,30 @@ public class SignupActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
-                                String displayName = currentUser.getDisplayName();
-                                String[] names = displayName.split(",");
-                                String fName = names[0];
-                                String lName = names[1];
-                                String imageUrl =
-                                currentUser.getPhotoUrl().toString();
-                                String user_id =  currentUser.getUid();
-                                User user = new User(fName,lName,imageUrl,user_id);
-                                user.setImageUid(imageUid);
-                                user.setGender(gender);
 
-                                Map<String, Object> postValues = user.toMap();
-                                Map<String, Object> childUpdates = new HashMap<>();
-                                childUpdates.put("/users/" + user_id,postValues);
-                                databaseReference.updateChildren(childUpdates);
+                                if(currentUser != null){
+                                    if(currentUser.getDisplayName() != null){
+                                        String displayName = currentUser.getDisplayName();
+                                        String[] names = displayName.split(",");
+                                        String fName = names[0];
+                                        String lName = names[1];
+                                        if(currentUser.getPhotoUrl() != null){
+                                            String imageUrl = currentUser.getPhotoUrl().toString();
+                                            String user_id =  currentUser.getUid();
+                                            User user = new User(fName,lName,imageUrl,user_id);
+                                            user.setImageUid(imageUid);
+                                            user.setGender(gender);
+
+                                            Map<String, Object> postValues = user.toMap();
+                                            Map<String, Object> childUpdates = new HashMap<>();
+                                            childUpdates.put("/users/" + user_id,postValues);
+                                            databaseReference.updateChildren(childUpdates);
+                                        }
+                                    }
+                                }
                             }
                         }
                     });
-
-
 
                 }
             }

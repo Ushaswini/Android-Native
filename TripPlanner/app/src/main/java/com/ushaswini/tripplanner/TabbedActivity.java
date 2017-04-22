@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TabbedActivity extends AppCompatActivity implements TabSettings.handleSaveChanges, TabTrips.TripListner{
+public class TabbedActivity extends AppCompatActivity implements TabSettings.handleSaveChanges, TabTrips.TripListner, AdapterFriends.IHandleConnect{
 
 
     final int ACTIVITY_SELECT_IMAGE = 1234;
@@ -52,6 +52,7 @@ public class TabbedActivity extends AppCompatActivity implements TabSettings.han
     DatabaseReference postsDatabaseReference;
     StorageReference storageReference;
     FirebaseAuth.AuthStateListener mAuthListener;
+
     User user;
     FirebaseUser currentUser;
     TabLayout tabLayout;
@@ -72,8 +73,9 @@ public class TabbedActivity extends AppCompatActivity implements TabSettings.han
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabbed);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setTitle("Trip Planner");
+
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -102,13 +104,18 @@ public class TabbedActivity extends AppCompatActivity implements TabSettings.han
         if(currentUser != null){
             currentUserUid = currentUser.getUid();
 
-            String displayName = currentUser.getDisplayName();
-            String[] names = displayName.split(",");
-            String fName = names[0];
-            String lName = names[1];
-            String imageUrl = currentUser.getPhotoUrl().toString();
-            String user_id = currentUser.getUid();
-            user = new User(fName,lName,imageUrl,user_id);
+            if(currentUser.getDisplayName() != null){
+                String displayName = currentUser.getDisplayName();
+                String[] names = displayName.split(",");
+                String fName = names[0];
+                String lName = names[1];
+                if(currentUser.getPhotoUrl() != null){
+                    String imageUrl = currentUser.getPhotoUrl().toString();
+                    String user_id = currentUser.getUid();
+                    user = new User(fName,lName,imageUrl,user_id);
+                }
+
+            }
         }
 
 
@@ -122,13 +129,18 @@ public class TabbedActivity extends AppCompatActivity implements TabSettings.han
                 if(currentUser != null){
                     currentUserUid = currentUser.getUid();
 
-                    String displayName = currentUser.getDisplayName();
-                    String[] names = displayName.split(",");
-                    String fName = names[0];
-                    String lName = names[1];
-                    String imageUrl = currentUser.getPhotoUrl().toString();
-                    String user_id = currentUser.getUid();
-                    user = new User(fName,lName,imageUrl,user_id);
+                    if(currentUser.getDisplayName() != null){
+                        String displayName = currentUser.getDisplayName();
+                        String[] names = displayName.split(",");
+                        String fName = names[0];
+                        String lName = names[1];
+                        if(currentUser.getPhotoUrl() != null){
+                            String imageUrl = currentUser.getPhotoUrl().toString();
+                            String user_id = currentUser.getUid();
+                            user = new User(fName,lName,imageUrl,user_id);
+                        }
+
+                    }
                 }
 
 
@@ -154,6 +166,9 @@ public class TabbedActivity extends AppCompatActivity implements TabSettings.han
 
             }
         });
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -167,6 +182,7 @@ public class TabbedActivity extends AppCompatActivity implements TabSettings.han
 
         FirebaseAuth.getInstance().signOut();
         Intent i=new Intent(TabbedActivity.this,LoginActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
         return true;
     }
@@ -222,8 +238,10 @@ public class TabbedActivity extends AppCompatActivity implements TabSettings.han
         });
     }
 
+    @Override
+    public void onBackPressed() {
 
-
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -297,6 +315,73 @@ public class TabbedActivity extends AppCompatActivity implements TabSettings.han
     public void addTrip() {
          Intent intent = new Intent(TabbedActivity.this,AddTripActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void addFriend(User friendUser) {
+
+        user.addToSentFriendRequestUid(friendUser.getUid());
+        friendUser.addToReceivedFriendRequestUid(user.getUid());
+
+        Map<String, Object> postCurrentUser = user.toMap();
+        Map<String, Object> postUser = friendUser.toMap();
+
+
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/users/" + user.getUid()  ,postCurrentUser);
+        childUpdates.put("/users/" + friendUser.getUid(),postUser);
+
+        databaseReference.updateChildren(childUpdates);
+
+        Toast.makeText(this, "Friend request sent", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void displayReceivedMessage(User friend) {
+        user.addToSentFriendRequestUid(friend.getUid());
+        friend.addToReceivedFriendRequestUid(user.getUid());
+
+        Map<String, Object> postCurrentUser = user.toMap();
+        Map<String, Object> postUser = friend.toMap();
+
+
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/users/" + user.getUid()  ,postCurrentUser);
+        childUpdates.put("/users/" + friend.getUid(),postUser);
+
+        databaseReference.updateChildren(childUpdates);
+
+        Toast.makeText(this, "Friend request sent", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void displaySentMessage() {
+        Toast.makeText(this, "Friend Request sent already.", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void removeFriend(User friendUser) {
+
+        user.removeFriendUid(friendUser.getUid());
+        friendUser.removeFriendUid(user.getUid());
+
+        Map<String, Object> postCurrentUser = user.toMap();
+        Map<String, Object> postUser = friendUser.toMap();
+
+
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/users/" + user.getUid()  ,postCurrentUser);
+        childUpdates.put("/users/" + friendUser.getUid(),postUser);
+
+        databaseReference.updateChildren(childUpdates);
+
+        //Toast.makeText(this, "Friend request sent", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Removed from friend list.", Toast.LENGTH_SHORT).show();
+
     }
 
 

@@ -123,4 +123,18 @@ public class TripDetails {
 
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "TripDetails{" +
+                "title='" + title + '\'' +
+                ", location='" + location + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", trip_id='" + trip_id + '\'' +
+                ", description='" + description + '\'' +
+                ", organizer_id='" + organizer_id + '\'' +
+                ", friendsUids=" + friendsUids +
+                ", messages=" + messages +
+                '}';
+    }
 }

@@ -74,6 +74,8 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_trip);
 
+        setTitle("Chat Room");
+
         mFirebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         storage = FirebaseStorage.getInstance();
@@ -286,5 +288,10 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
 
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ViewTripActivity.this, TabbedActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Removes other Activities from stack
+        startActivity(intent);
+    }
 }

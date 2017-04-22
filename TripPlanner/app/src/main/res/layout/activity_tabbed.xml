@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            android:visibility="visible"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
@@ -29,7 +30,9 @@
             android:id="@+id/tablayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorFriendMessage"
             app:tabGravity="fill"
+            app:tabIndicatorColor="@color/colorFriendMessage"
             app:tabMode="fixed" />
 
     </android.support.design.widget.AppBarLayout>

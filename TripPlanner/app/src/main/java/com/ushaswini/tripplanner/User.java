@@ -28,7 +28,21 @@ public class User implements Serializable {
         MALE , FEMALE;
     }
 
+    enum FRIEND_STATUS{
+        FRIEND, SENT, RECEIVED, UNCONNECTED;
+    }
+
+    FRIEND_STATUS status;
+
     GENDER gender;
+
+    public FRIEND_STATUS getStatus() {
+        return status;
+    }
+
+    public void setStatus(FRIEND_STATUS status) {
+        this.status = status;
+    }
 
     public GENDER getGender() {
         return gender;
@@ -79,6 +93,9 @@ public class User implements Serializable {
     }
 
     public ArrayList<String> getFriendsUids() {
+        if(friendsUids == null){
+            friendsUids = new ArrayList<>();
+        }
         return friendsUids;
     }
 
@@ -87,11 +104,36 @@ public class User implements Serializable {
     }
 
     public ArrayList<String> getTripUids() {
+        if(tripUids == null){
+            tripUids = new ArrayList<>();
+        }
         return tripUids;
     }
 
     public void setTripUids(ArrayList<String> tripUids) {
         this.tripUids = tripUids;
+    }
+
+    public ArrayList<String> getReceivedFriendRequestUids() {
+        if(receivedFriendRequestUids == null){
+            receivedFriendRequestUids = new ArrayList<>();
+        }
+        return receivedFriendRequestUids;
+    }
+
+    public void setReceivedFriendRequestUids(ArrayList<String> receivedFriendRequestUids) {
+        this.receivedFriendRequestUids = receivedFriendRequestUids;
+    }
+
+    public ArrayList<String> getSentFriendRequestUids() {
+        if(sentFriendRequestUids == null){
+            sentFriendRequestUids = new ArrayList<>();
+        }
+        return sentFriendRequestUids;
+    }
+
+    public void setSentFriendRequestUids(ArrayList<String> sentFriendRequestUids) {
+        this.sentFriendRequestUids = sentFriendRequestUids;
     }
 
     public User(String fName, String lName, String imageUrl, String uid) {
@@ -117,6 +159,12 @@ public class User implements Serializable {
         friendsUids.add(friendUid);
     }
 
+    public void removeFriendUid(String friendUid){
+        if(friendsUids != null){
+            friendsUids.remove(friendUid);
+        }
+    }
+
     public void addToSentFriendRequestUid(String friendUid){
         if(sentFriendRequestUids == null){
             sentFriendRequestUids = new ArrayList<>();
@@ -129,6 +177,18 @@ public class User implements Serializable {
             receivedFriendRequestUids = new ArrayList<>();
         }
         receivedFriendRequestUids.add(friendUid);
+    }
+
+    public void removeFromReceivedRequestUid(String friendUid){
+        if(receivedFriendRequestUids.contains(friendUid)){
+            receivedFriendRequestUids.remove(friendUid);
+        }
+    }
+
+    public void removeFromSentFriendRequestUid(String friendUid){
+        if(sentFriendRequestUids.contains(friendUid)){
+            sentFriendRequestUids.remove(friendUid);
+        }
     }
 
     public User() {
@@ -153,14 +213,6 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
-                "fName='" + fName + '\'' +
-                ", lName='" + lName + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", uid='" + uid + '\'' +
-                ", imageUid='" + imageUid + '\'' +
-                ", friendsUids=" + friendsUids +
-                ", tripUids=" + tripUids +
-                '}';
+        return "Received friend request from " + fName + ", " + lName;
     }
 }

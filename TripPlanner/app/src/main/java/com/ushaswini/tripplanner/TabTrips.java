@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,10 @@ public class TabTrips extends Fragment {
     ArrayList<TripDetails> friends_trips;
     ArrayList<TripDetails> listOfTrips;
 
+    ArrayList<String> friendsUids;
+    ArrayList<String> tripUids;
+
+
 
     DatabaseReference tripsDatabaseReference;
     String uid = "";
@@ -64,6 +69,9 @@ public class TabTrips extends Fragment {
         your_trips = new ArrayList<>();
         friends_trips = new ArrayList<>();
         listOfTrips = new ArrayList<>();
+
+        friendsUids = new ArrayList<>();
+        tripUids = new ArrayList<>();
 
         addTrip = (FloatingActionButton) getView().findViewById(R.id.fab);
         lv_your_trips = (ListView) getView().findViewById(R.id.your_trips);
@@ -88,8 +96,84 @@ public class TabTrips extends Fragment {
             }
         });
 
+        tripsDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        tripsDatabaseReference = FirebaseDatabase.getInstance().getReference("trips");
+
+
+        tripsDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.child("users").child(uid).exists()){
+
+                    friendsUids.clear();
+                    tripUids.clear();
+                    friends_trips.clear();
+                    your_trips.clear();
+
+                    String friendUid;
+                    for(DataSnapshot data : dataSnapshot.child("users").child(uid).child("friendsUids").getChildren()){
+                        friendUid = (String) data.getValue();
+                        friendsUids.add(friendUid);
+                    }
+                }
+
+
+
+
+                if(dataSnapshot.child("users").child(uid).child("tripUids").exists()){
+
+                    TripDetails trip;
+                    String tripId;
+                    for(DataSnapshot data : dataSnapshot.child("users").child(uid).child("tripUids").getChildren() ){
+                        tripId = (String) data.getValue();
+                        tripUids.add(tripId);
+                        trip = dataSnapshot.child("trips").child(tripId).getValue(TripDetails.class);
+                        your_trips.add(trip);
+
+
+
+                        //friends_trips.remove(trip);
+                    }
+                }
+
+                for(String friendUid : friendsUids){
+                    if(dataSnapshot.child("users").child(friendUid).child("tripUids").exists()){
+                        String tripUid;
+                        TripDetails trip;
+
+                        for(DataSnapshot data : dataSnapshot.child("users").child(friendUid).child("tripUids").getChildren()){
+                            tripUid  = (String) data.getValue();
+
+                            if(!tripUids.contains(tripUid)){
+                                trip = dataSnapshot.child("trips").child(tripUid).getValue(TripDetails.class);
+                                friends_trips.add(trip);
+                            }
+
+
+                        }
+                    }
+
+                }
+
+
+
+
+
+                your_adapter.notifyDataSetChanged();
+                friend_adapter.notifyDataSetChanged();
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        /*tripsDatabaseReference = FirebaseDatabase.getInstance().getReference("trips");
 
         tripsDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -111,8 +195,10 @@ public class TabTrips extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
     }
+
+
 
     private void separateListOfTrips(){
         for(TripDetails trip : listOfTrips){
