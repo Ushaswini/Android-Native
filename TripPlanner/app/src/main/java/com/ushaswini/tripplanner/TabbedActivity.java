@@ -1,6 +1,8 @@
 package com.ushaswini.tripplanner;
 
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -8,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -19,12 +22,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -36,6 +42,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -67,6 +74,7 @@ public class TabbedActivity extends AppCompatActivity implements TabSettings.han
     String currentUserUid;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    MaterialSearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +96,9 @@ public class TabbedActivity extends AppCompatActivity implements TabSettings.han
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(mViewPager);
 
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_search);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_friends);
+
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_trip);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_friends);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_notifications);
         tabLayout.getTabAt(3).setIcon(R.drawable.ic_settings);
 
@@ -167,18 +176,33 @@ public class TabbedActivity extends AppCompatActivity implements TabSettings.han
             }
         });
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);*/
+
+        //searchView = (MaterialSearchView) findViewById(R.id.search_view);
+
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.menu_tabbed, menu);
+
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+
 
         FirebaseAuth.getInstance().signOut();
         Intent i=new Intent(TabbedActivity.this,LoginActivity.class);
@@ -208,7 +232,7 @@ public class TabbedActivity extends AppCompatActivity implements TabSettings.han
     }
 
     @Override
-    public void saveChanges(final String fName, final String lName, String oldPassword, String newPassword, final User.GENDER gender) {
+    public void saveChanges(final String fName, final String lName, final User.GENDER gender) {
         this.fName = fName;
         this.lName = lName;
         UserProfileChangeRequest changeRequest = new UserProfileChangeRequest.Builder()
@@ -236,6 +260,51 @@ public class TabbedActivity extends AppCompatActivity implements TabSettings.han
                 }
             }
         });
+    }
+
+    @Override
+    public void changePassword(String oldPassword, final String newPassword) {
+
+        if(!newPassword.equals(oldPassword)){
+
+            AuthCredential credential = EmailAuthProvider
+                    .getCredential(currentUser.getEmail(), oldPassword);
+
+// Prompt the user to re-provide their sign-in credentials
+            currentUser.reauthenticate(credential)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                currentUser.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+
+                                            Toast.makeText(TabbedActivity.this, "Password Updated", Toast.LENGTH_SHORT).show();
+                                            FirebaseAuth.getInstance().signOut();
+
+                                            Intent intent = new Intent(TabbedActivity.this,LoginActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            startActivity(intent);
+
+                                            Log.d("demo", "Password updated");
+                                        } else {
+                                            Toast.makeText(TabbedActivity.this, "Error password not updated.", Toast.LENGTH_SHORT).show();
+                                            Log.d("demo", "Error password not updated");
+                                        }
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(TabbedActivity.this, "Error. auth failed", Toast.LENGTH_SHORT).show();
+                                Log.d("demo", "Error auth failed");
+                            }
+                        }
+                    });
+        }else{
+            Toast.makeText(this, "New Password cannot be same as old password.", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
@@ -381,6 +450,11 @@ public class TabbedActivity extends AppCompatActivity implements TabSettings.han
 
         //Toast.makeText(this, "Friend request sent", Toast.LENGTH_SHORT).show();
         Toast.makeText(this, "Removed from friend list.", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void selectFriend(int position, View v) {
 
     }
 

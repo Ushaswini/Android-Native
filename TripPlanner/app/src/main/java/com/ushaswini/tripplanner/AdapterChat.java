@@ -50,15 +50,18 @@ public class AdapterChat extends ArrayAdapter<MessageDetails> {
 
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.custom_image_message, parent, false);
+
+            TextView tv_name = (TextView) view.findViewById(R.id.tv_name);
             TextView tv_details = (TextView) view.findViewById(R.id.time_i);
             ImageView image = (ImageView) view.findViewById(R.id.image);
             ImageButton im_comment = (ImageButton) view.findViewById(R.id.im_comment_i);
+            ImageButton im_delete = (ImageButton) view.findViewById(R.id.im_delete_i);
             LinearLayout li_comments = (LinearLayout) view.findViewById(R.id.list_comments_i);
 
             PrettyTime time = new PrettyTime();
+
             String details = message.getUser_name() + "\n" + time.format(message.getPosted_time());
             tv_details.setText(details);
-
             Picasso.with(mContext).load(message.getImage_url()).into(image);
 
             ArrayList<Comment> comments = message.getComments();
@@ -82,6 +85,13 @@ public class AdapterChat extends ArrayAdapter<MessageDetails> {
 
             }
 
+            im_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    iShareData.deleteMessage(position);
+                }
+            });
+
             im_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -95,12 +105,16 @@ public class AdapterChat extends ArrayAdapter<MessageDetails> {
             view = inflater.inflate(R.layout.custom_message,parent,false);
 
             TextView tv_message = (TextView) view.findViewById(R.id.tv_message);
+            TextView tv_name = (TextView) view.findViewById(R.id.tv_name);
+
             TextView tv_time = (TextView) view.findViewById(R.id.time_m);
             ImageButton im_comment = (ImageButton) view.findViewById(R.id.im_comment_m);
+            ImageButton im_delete = (ImageButton) view.findViewById(R.id.im_delete_m);
             LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.list_comments);
 
             tv_message.setText(message.getText());
             PrettyTime time = new PrettyTime();
+
 
             String details = message.getUser_name() + "\n" + time.format(message.getPosted_time());
             tv_time.setText(details);
@@ -109,6 +123,13 @@ public class AdapterChat extends ArrayAdapter<MessageDetails> {
                 @Override
                 public void onClick(View v) {
                     iShareData.postComment(position);
+                }
+            });
+
+            im_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    iShareData.deleteMessage(position);
                 }
             });
 
@@ -143,7 +164,7 @@ public class AdapterChat extends ArrayAdapter<MessageDetails> {
     interface  IShareData{
         void postComment(int position);
 
-        void deleteImageMessage(MessageDetails messageDetails);
+        void deleteMessage(int position);
 
     }
 }

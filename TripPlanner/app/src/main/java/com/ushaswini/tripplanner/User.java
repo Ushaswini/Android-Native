@@ -198,7 +198,9 @@ public class User implements Serializable {
 
         HashMap<String,Object> result = new HashMap<>();
         result.put("fName",fName);
+        result.put("fname",fName.toLowerCase());
         result.put("lName",lName);
+        result.put("lname",lName.toLowerCase());
         result.put("imageUrl",imageUrl);
         result.put("uid",uid);
         result.put("friendsUids",friendsUids);

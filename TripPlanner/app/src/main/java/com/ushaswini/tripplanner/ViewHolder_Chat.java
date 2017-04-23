@@ -14,6 +14,7 @@ import android.widget.TextView;
 class ViewHolder_Chat {
 
     TextView tv_title;
+    TextView tv_name;
     TextView tv_location;
     ImageView imageView;
     Button button;

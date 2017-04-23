@@ -47,11 +47,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/et_password"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="42dp"
-        android:background="@android:color/holo_blue_dark"
+        android:background="@color/colorPrimary"
         android:text="@string/login"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:layout_alignRight="@+id/et_password"
+        android:layout_alignEnd="@+id/et_password"
+        android:layout_alignLeft="@+id/et_password"
+        android:layout_alignStart="@+id/et_password" />
 
     <Button
         android:id="@+id/btn_create_new_account"
@@ -64,7 +67,7 @@
         android:layout_alignRight="@+id/et_password"
         android:layout_alignStart="@+id/et_password"
         android:layout_marginBottom="31dp"
-        android:background="@android:color/holo_blue_dark"
+        android:background="@color/colorPrimary"
         android:text="@string/createNewAccount"
         android:textAllCaps="false" />
 </RelativeLayout>

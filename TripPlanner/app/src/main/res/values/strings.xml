@@ -3,7 +3,7 @@
     <string name="login">Login</string>
     <string name="email">Your email id</string>
     <string name="password">Your password</string>
-    <string name="createNewAccount">Create new account</string>
+    <string name="createNewAccount">Not a user! Sign Up.</string>
     <string name="gender">Gender</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="choose_password">Choose Password</string>

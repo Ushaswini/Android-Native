@@ -22,6 +22,8 @@ public class MessageDetails {
 
     ArrayList<Comment> comments;
 
+    ArrayList<String> usersWhoDeletedThisMessage;
+
     public String getId() {
         return id;
     }
@@ -82,6 +84,14 @@ public class MessageDetails {
         this.comments = comments;
     }
 
+    public ArrayList<String> getUsersWhoDeletedThisMessage() {
+        return usersWhoDeletedThisMessage;
+    }
+
+    public void setUsersWhoDeletedThisMessage(ArrayList<String> usersWhoDeletedThisMessage) {
+        this.usersWhoDeletedThisMessage = usersWhoDeletedThisMessage;
+    }
+
     public void addComment(Comment comment) {
         if(comments==null)
             comments= new ArrayList<>();
@@ -110,6 +120,13 @@ public class MessageDetails {
 
 
         return result;
+    }
+
+    public void addToUserWhoDeletedThisMessage(String uid){
+        if(usersWhoDeletedThisMessage == null){
+            usersWhoDeletedThisMessage = new ArrayList<>();
+        }
+        usersWhoDeletedThisMessage.add(uid);
     }
 
     public MessageDetails(String text, String user_name, Date posted_time, String image_url, boolean post_type,String key) {

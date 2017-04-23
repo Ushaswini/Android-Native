@@ -10,6 +10,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,7 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ViewTripActivity extends AppCompatActivity implements AdapterChat.IShareData{
+public class ViewTripActivity extends AppCompatActivity implements AdapterChat.IShareData {
 
     ImageView imCoverPhoto;
     TextView tvTripDetails;
@@ -49,16 +52,12 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
     ImageButton imMessageSend;
 
 
-    FirebaseAuth mFirebaseAuth;
     DatabaseReference databaseReference;
-    FirebaseAuth.AuthStateListener mAuthListener;
-
-    FirebaseStorage storage;
     StorageReference storageReference;
 
     final int ACTIVITY_SELECT_IMAGE = 1234;
 
-    ArrayList<MessageDetails> messages ;
+    ArrayList<MessageDetails> messages;
     AdapterChat adapterChat;
 
     TripDetails currentTrip;
@@ -76,11 +75,6 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
 
         setTitle("Chat Room");
 
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
-
         messages = new ArrayList<>();
 
         imCoverPhoto = (ImageView) findViewById(R.id.im_cover_photo);
@@ -94,21 +88,22 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
         imImageSend.setOnClickListener(gallery_click_listener);
 
 
-        if(getIntent().getExtras().containsKey("trip_id")){
+        if (getIntent().getExtras().containsKey("trip_id")) {
             tripId = getIntent().getExtras().getString("trip_id");
         }
 
-        if(getIntent().getExtras().containsKey("isMemberOf")){
+        if (getIntent().getExtras().containsKey("isMemberOf")) {
             isMemberOf = (boolean) getIntent().getExtras().get("isMemberOf");
         }
 
 
+        storageReference = FirebaseStorage.getInstance().getReference();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference = FirebaseDatabase.getInstance().getReference("trips");
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         userDisplayName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
 
-        adapterChat = new AdapterChat(this,R.layout.custom_image_message,messages);
+        adapterChat = new AdapterChat(this, R.layout.custom_image_message, messages);
         lvChats.setAdapter(adapterChat);
         adapterChat.setNotifyOnChange(true);
     }
@@ -120,44 +115,85 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
 
 
         databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    messages.clear();
-                    ArrayList<MessageDetails> data = new ArrayList<MessageDetails>();
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                messages.clear();
+                ArrayList<MessageDetails> data = new ArrayList<MessageDetails>();
 
-                    if(dataSnapshot.child("trips").child(tripId).child("messages").exists()){
-                        for (DataSnapshot snapshot: dataSnapshot.child("trips").child(tripId).child("messages").getChildren()) {
-                            Log.d("data",snapshot.getValue(MessageDetails.class).toString());
-                            data.add(snapshot.getValue(MessageDetails.class));
+
+                MessageDetails message;
+                for (DataSnapshot snapshot : dataSnapshot.child(tripId + "/messages").getChildren()) {
+                    Log.d("data", snapshot.getValue(MessageDetails.class).toString());
+                    message = snapshot.getValue(MessageDetails.class);
+                    if(message.getUsersWhoDeletedThisMessage() != null){
+                        if(!message.getUsersWhoDeletedThisMessage().contains(userUid)){
+                            data.add(message);
                         }
-
-                        messages.addAll(data);
-                        adapterChat.notifyDataSetChanged();
-
-
+                    }else{
+                        data.add(message);
                     }
-
-                    if(dataSnapshot.child("trips").child(tripId).exists()){
-                        currentTrip = dataSnapshot.child("trips").child(tripId).getValue(TripDetails.class);
-                        Picasso.with(ViewTripActivity.this).load(currentTrip.getImageUrl()).into(imCoverPhoto);
-                        tvTripDetails.setText(currentTrip.getTitle());
-
-
-                    }
-
-
                 }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+                messages.addAll(data);
+                adapterChat.notifyDataSetChanged();
 
+
+                if (dataSnapshot.child(tripId).exists()) {
+                    currentTrip = dataSnapshot.child(tripId).getValue(TripDetails.class);
+                    Picasso.with(ViewTripActivity.this).load(currentTrip.getImageUrl()).into(imCoverPhoto);
+                    tvTripDetails.setText(currentTrip.getTitle());
                 }
-            });
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(userUid.equals(currentTrip.getOrganizer_id())){
+            getMenuInflater().inflate(R.menu.menu_remove_trip, menu);
+            return true;
+        }else{
+            getMenuInflater().inflate(R.menu.menu_add_friends, menu);
+            return true;
+        }
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(userUid.equals(currentTrip.getOrganizer_id())){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                    .setTitle("Do you want to delete this trip?")
+                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            databaseReference.child(tripId).removeValue();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+            builder.show();
+        }else{
+            Intent i=new Intent(ViewTripActivity.this,AddFriendToTripActivity.class);
+            i.putExtra("user_id",userUid);
+            i.putExtra("trip_id",tripId);
+            startActivity(i);
+        }
+
+
+
+        return true;
+    }
 
     View.OnClickListener send_click_listener = new View.OnClickListener() {
         @Override
@@ -167,13 +203,13 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
             Date date = Calendar.getInstance().getTime();
             String key = UUID.randomUUID().toString();
 
-            MessageDetails messageDetails = new MessageDetails(text,userDisplayName,date,"",false,key);
+            MessageDetails messageDetails = new MessageDetails(text, userDisplayName, date, "", false, key);
 
             currentTrip.addMessage(messageDetails);
 
             Map<String, Object> postValues = currentTrip.toMap();
             Map<String, Object> childUpdates = new HashMap<>();
-            childUpdates.put("/trips/" +tripId ,postValues);
+            childUpdates.put(tripId, postValues);
             databaseReference.updateChildren(childUpdates);
 
             etMessage.setText("");
@@ -188,7 +224,7 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);//
-            startActivityForResult(Intent.createChooser(intent, "Select Picture"),ACTIVITY_SELECT_IMAGE);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), ACTIVITY_SELECT_IMAGE);
         }
     };
 
@@ -213,12 +249,12 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
         }
     }
 
-    void storeImage(Bitmap bitmap){
+    void storeImage(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] dataArray = baos.toByteArray();
 
-        StorageReference reference = storageReference.child("messages_media/"+ tripId + "/"+ UUID.randomUUID().toString() + ".png");
+        StorageReference reference = storageReference.child("messages_media/" + tripId + "/" + UUID.randomUUID().toString() + ".png");
         UploadTask uploadTask = reference.putBytes(dataArray);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -234,13 +270,13 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
                 Date date = Calendar.getInstance().getTime();
                 String key = UUID.randomUUID().toString();
 
-                MessageDetails messageDetails = new MessageDetails("",userDisplayName,date, taskSnapshot.getDownloadUrl().toString(),true,key);
+                MessageDetails messageDetails = new MessageDetails("", userDisplayName, date, taskSnapshot.getDownloadUrl().toString(), true, key);
 
                 currentTrip.addMessage(messageDetails);
 
                 Map<String, Object> postValues = currentTrip.toMap();
                 Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put("/trips/" +tripId ,postValues);
+                childUpdates.put( tripId, postValues);
                 databaseReference.updateChildren(childUpdates);
             }
         });
@@ -257,19 +293,17 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        String commentKey=UUID.randomUUID().toString();
-                        Comment comment = new Comment(userDisplayName,et_comment.getText().toString(),Calendar.getInstance().getTime(),commentKey);
+                        String commentKey = UUID.randomUUID().toString();
+                        Comment comment = new Comment(userDisplayName, et_comment.getText().toString(), Calendar.getInstance().getTime(), commentKey);
 
                         currentTrip.getMessages().get(position).addComment(comment);
-                        //Log.d("demo",messageDetails.toString());
 
                         Map<String, Object> postValues = currentTrip.toMap();
                         Map<String, Object> childUpdates = new HashMap<>();
-                        childUpdates.put("/trips/" +tripId ,postValues);
+                        childUpdates.put(tripId, postValues);
                         databaseReference.updateChildren(childUpdates);
 
 
-                        //databaseReference.child("trips").child(tripId).child(messageDetails.getId()).setValue(messageDetails);
 
                     }
                 })
@@ -284,7 +318,15 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
     }
 
     @Override
-    public void deleteImageMessage(MessageDetails messageDetails) {
+    public void deleteMessage(int position) {
+
+        currentTrip.getMessages().get(position).addToUserWhoDeletedThisMessage(userUid);
+
+
+        Map<String, Object> postValues = currentTrip.toMap();
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(tripId, postValues);
+        databaseReference.updateChildren(childUpdates);
 
     }
 

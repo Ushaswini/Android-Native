@@ -141,7 +141,9 @@ public class JoinTripActivity extends AppCompatActivity implements AdapterFriend
                 }
                 for(DataSnapshot data : dataSnapshot.child("trips/" + tripId + "/friendsUids").getChildren()){
                     String uid = (String) data.getValue();
-                    tripMembersUid.add(uid);
+                    if(!uid.equals(currentUserId)){
+                        tripMembersUid.add(uid);
+                    }
                     /*User friend = data.getValue(User.class);
                     if(!friend.getUid().equals(currentUserId))
                         friends.add(friend);*/
@@ -246,6 +248,11 @@ public class JoinTripActivity extends AppCompatActivity implements AdapterFriend
 
         databaseReference.updateChildren(childUpdates);
         Toast.makeText(this, "Removed from your friends.", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void selectFriend(int position, View v) {
 
     }
 }

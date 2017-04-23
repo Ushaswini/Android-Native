@@ -46,7 +46,7 @@ public class AdapterFriends extends ArrayAdapter<User> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         final User friend = friends.get(position);
         ViewHolder_Friend holder;
@@ -130,6 +130,13 @@ public class AdapterFriends extends ArrayAdapter<User> {
             }
         });
 
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iHandleConnect.selectFriend(position,v);
+            }
+        });
+
         return convertView;
     }
 
@@ -138,5 +145,6 @@ public class AdapterFriends extends ArrayAdapter<User> {
         void displayReceivedMessage(User friend);
         void displaySentMessage();
         void removeFriend(User user);
+        void selectFriend(int position, View v);
     }
 }

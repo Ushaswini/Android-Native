@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -150,6 +152,22 @@ public class AddTripActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add_friend_to_trip, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Intent i=new Intent(AddTripActivity.this,AddFriendToTripActivity.class);
+        i.putExtra("user_id",currentUser.getUid());
+        i.putExtra("trip_id",uid);
+        startActivity(i);
+        return true;
     }
 
     @Override

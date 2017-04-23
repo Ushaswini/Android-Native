@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,6 +42,8 @@ public class TabSettings extends Fragment {
     EditText etNewPassword;
 
     Button btnSave;
+    Button btnChangePassword;
+
     ImageButton imChangeImage;
     User currentUser;
     RadioGroup radioGroup;
@@ -72,6 +75,7 @@ public class TabSettings extends Fragment {
         imChangeImage = (ImageButton) getView().findViewById(R.id.im_change_image);
         etOldPassword = (EditText) getView().findViewById(R.id.et_password);
         etNewPassword = (EditText) getView().findViewById(R.id.et_newPassword);
+        btnChangePassword = (Button) getView().findViewById(R.id.btn_change_password);
 
         radioGroup = (RadioGroup) getView().findViewById(R.id.radioGroup);
         maleBtn = (RadioButton) getView().findViewById(R.id.male);
@@ -82,6 +86,7 @@ public class TabSettings extends Fragment {
         etFirstName.setText(currentUser.getfName());
         etLastName.setText(currentUser.getlName());
         btnSave.setOnClickListener(save_click_listener);
+        btnChangePassword.setOnClickListener(change_password_listener);
         imChangeImage.setOnClickListener(change_image_listener);
         Picasso.with(getContext()).load(currentUser.getImageUrl()).into(imChangeImage);
 
@@ -110,9 +115,20 @@ public class TabSettings extends Fragment {
 
             String fName = etFirstName.getText().toString();
             String lName = etLastName.getText().toString();
+
+            mListener.saveChanges(fName,lName,gender);
+        }
+    };
+
+    View.OnClickListener change_password_listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
             String oldPassword = etOldPassword.getText().toString();
             String newPassword = etNewPassword.getText().toString();
-            mListener.saveChanges(fName,lName,oldPassword,newPassword,gender);
+            if(oldPassword.equals("") || newPassword.equals("")){
+                Toast.makeText( getContext(), "Passwords cannot be empty.", Toast.LENGTH_SHORT).show();
+            }
+            mListener.changePassword (oldPassword,newPassword);
         }
     };
 
@@ -143,6 +159,7 @@ public class TabSettings extends Fragment {
 
     interface handleSaveChanges{
         void changeImage();
-        void saveChanges(String fName, String lName , String oldPassword, String newPassword, User.GENDER gender );
+        void saveChanges(String fName, String lName,User.GENDER gender );
+        void changePassword(String oldPassword, String newPassword);
     }
 }

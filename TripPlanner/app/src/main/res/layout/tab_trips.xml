@@ -19,6 +19,7 @@
         android:layout_alignParentTop="true"
         android:layout_gravity="top|end"
         app:backgroundTint="@color/colorPrimary"
+        app:rippleColor="@android:color/background_light"
         app:srcCompat="@android:drawable/ic_input_add" />
 
     <TextView

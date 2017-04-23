@@ -129,7 +129,9 @@ public class TabTrips extends Fragment {
                         tripId = (String) data.getValue();
                         tripUids.add(tripId);
                         trip = dataSnapshot.child("trips").child(tripId).getValue(TripDetails.class);
-                        your_trips.add(trip);
+                        if(trip != null){
+                            your_trips.add(trip);
+                        }
 
 
 
