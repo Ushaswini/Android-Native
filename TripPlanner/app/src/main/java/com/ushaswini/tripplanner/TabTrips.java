@@ -149,7 +149,9 @@ public class TabTrips extends Fragment {
 
                             if(!tripUids.contains(tripUid)){
                                 trip = dataSnapshot.child("trips").child(tripUid).getValue(TripDetails.class);
-                                friends_trips.add(trip);
+                                if(trip != null){
+                                    friends_trips.add(trip);
+                                }
                             }
 
 

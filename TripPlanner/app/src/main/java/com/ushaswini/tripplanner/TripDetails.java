@@ -1,6 +1,8 @@
 package com.ushaswini.tripplanner;
 
 
+import com.google.android.gms.location.places.Place;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +19,8 @@ public class TripDetails {
     ArrayList<String> friendsUids;
 
     ArrayList<MessageDetails> messages;
+
+    ArrayList<Place> places;
 
     public ArrayList<MessageDetails> getMessages() {
         return messages;
@@ -94,6 +98,19 @@ public class TripDetails {
             messages = new ArrayList<>();
         }
         messages.add(message);
+    }
+
+    public void addPlaceToTrip(Place place){
+        if(places == null){
+            places =  new ArrayList<>();
+        }
+        places.add(place);
+    }
+
+    public void removePlaceFromTrip(Place place){
+        if(place != null){
+            places.remove(place);
+        }
     }
 
     public TripDetails() {

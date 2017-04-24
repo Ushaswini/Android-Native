@@ -5,6 +5,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyBhunOhwnb0an-kned-sc64B-2lcO3F0eY"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -30,7 +34,14 @@
                 android:value=".SearchResultsActivity" />
         </activity>
         <activity android:name=".AddTripActivity" />
-        <activity android:name=".ViewTripActivity" />
+        <activity android:name=".ViewTripActivity">
+
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyBhunOhwnb0an-kned-sc64B-2lcO3F0eY"/>
+
+        </activity>
+
         <activity android:name=".JoinTripActivity" />
         <activity android:name=".UserProfileActivity" />
         <activity

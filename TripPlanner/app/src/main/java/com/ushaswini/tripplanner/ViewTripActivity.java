@@ -19,10 +19,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -66,6 +70,9 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
     String tripId;
     boolean isMemberOf;
     String userDisplayName;
+
+    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+
 
 
     @Override
@@ -154,11 +161,12 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         if(userUid.equals(currentTrip.getOrganizer_id())){
-            getMenuInflater().inflate(R.menu.menu_remove_trip, menu);
+            getMenuInflater().inflate(R.menu.menu_trip_organizer, menu);
             return true;
         }else{
-            getMenuInflater().inflate(R.menu.menu_add_friends, menu);
+            getMenuInflater().inflate(R.menu.menu_trip_non_organizer, menu);
             return true;
         }
 
@@ -168,32 +176,78 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if(userUid.equals(currentTrip.getOrganizer_id())){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                    .setTitle("Do you want to delete this trip?")
-                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            databaseReference.child(tripId).removeValue();
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+            switch (item.getItemId()){
+                case R.id.action_remove:{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                            .setTitle("Do you want to delete this trip?")
+                            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    databaseReference.child(tripId).removeValue();
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    });
-            builder.show();
+                                }
+                            });
+                    builder.show();
+                    break;
+                }
+                case R.id.action_add_friends:{
+
+                    Intent i = new Intent(ViewTripActivity.this, AddFriendToTripActivity.class);
+                    i.putExtra("user_id", userUid);
+                    i.putExtra("trip_id", tripId);
+                    startActivity(i);
+                    break;
+
+                }
+                case R.id.action_add_location:{
+                    try {
+                        Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                                .build(this);
+                        startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+                    } catch (GooglePlayServicesRepairableException e) {
+                        // TODO: Handle the error.
+                    } catch (GooglePlayServicesNotAvailableException e) {
+                        // TODO: Handle the error.
+                    }
+                    break;
+                }
+
+            }
+
         }else{
-            Intent i=new Intent(ViewTripActivity.this,AddFriendToTripActivity.class);
-            i.putExtra("user_id",userUid);
-            i.putExtra("trip_id",tripId);
-            startActivity(i);
+            switch (item.getItemId()){
+                case R.id.action_add_friends:{
+
+                    Intent i = new Intent(ViewTripActivity.this, AddFriendToTripActivity.class);
+                    i.putExtra("user_id", userUid);
+                    i.putExtra("trip_id", tripId);
+                    startActivity(i);
+                    break;
+
+                }
+                case R.id.action_add_location:{
+                    try {
+                        Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                                        .build(this);
+                        startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+                    } catch (GooglePlayServicesRepairableException e) {
+                        // TODO: Handle the error.
+                    } catch (GooglePlayServicesNotAvailableException e) {
+                        // TODO: Handle the error.
+                    }
+                    break;
+                }
+            }
         }
-
-
-
         return true;
     }
+
+
 
     View.OnClickListener send_click_listener = new View.OnClickListener() {
         @Override
@@ -245,6 +299,27 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
                     }
 
                 }
+            }
+        }
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                currentTrip.addPlaceToTrip(place);
+
+                Map<String, Object> postValues = currentTrip.toMap();
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put(tripId, postValues);
+                databaseReference.updateChildren(childUpdates);
+
+                Log.i("demo", "Place: " + place.getName());
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                // TODO: Handle the error.
+               Log.d("demo", status.getStatus().toString());
+                Log.i("demo", status.getStatusMessage());
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
             }
         }
     }

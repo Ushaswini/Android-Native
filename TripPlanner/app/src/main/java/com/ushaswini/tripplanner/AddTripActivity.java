@@ -156,17 +156,30 @@ public class AddTripActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add_friend_to_trip, menu);
+        //to avoid remove trip option.
+        getMenuInflater().inflate(R.menu.menu_trip_non_organizer, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Intent i=new Intent(AddTripActivity.this,AddFriendToTripActivity.class);
-        i.putExtra("user_id",currentUser.getUid());
-        i.putExtra("trip_id",uid);
-        startActivity(i);
+        switch (item.getItemId()){
+            case R.id.action_add_friends: {
+                Intent i = new Intent(AddTripActivity.this, AddFriendToTripActivity.class);
+                i.putExtra("user_id", currentUser.getUid());
+                i.putExtra("trip_id", uid);
+                startActivity(i);
+                break;
+            }
+            case R.id.action_add_location:{
+
+                break;
+            }
+
+        }
+
+
         return true;
     }
 

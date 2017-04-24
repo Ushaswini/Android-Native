@@ -93,4 +93,9 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         }
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }
