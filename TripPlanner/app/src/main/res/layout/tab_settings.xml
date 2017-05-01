@@ -14,7 +14,7 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:background="@drawable/ic_person"
-        app:srcCompat="@drawable/rounded_button"
+        app:srcCompat="@drawable/rounded_image_button"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

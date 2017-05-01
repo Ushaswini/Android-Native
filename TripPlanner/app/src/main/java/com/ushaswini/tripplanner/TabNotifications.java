@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -42,16 +43,13 @@ public class TabNotifications extends Fragment {
     ArrayAdapter<User> adapter;
 
     ArrayList<String> notifications;
-
     ArrayList<String> uids;
     ArrayList<User> users;
+
     DatabaseReference databaseReference;
     FirebaseAuth firebaseAuth;
+
     String currentUserUid;
-
-
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,7 +68,7 @@ public class TabNotifications extends Fragment {
         uids = new ArrayList<>();
         users = new ArrayList<>();
 
-        adapter = new ArrayAdapter<User>(getContext(),android.R.layout.simple_list_item_1,users);
+        adapter = new AdapterNotifications(getContext(),R.layout.custom_notification,users);
         lt_notifications.setAdapter(adapter);
         adapter.setNotifyOnChange(true);
 
@@ -79,79 +77,41 @@ public class TabNotifications extends Fragment {
 
         currentUserUid = firebaseAuth.getCurrentUser().getUid();
 
-        lt_notifications.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                        .setTitle("Do you want to add to your friend's list")
-                        .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                currentUser.removeFromReceivedRequestUid(uids.get(position));
-                                currentUser.addFriendUid(uids.get(position));
-
-                                User friend = users.get(position);
-                                friend.addFriendUid(currentUserUid);
-                                friend.removeFromSentFriendRequestUid(currentUserUid);
-
-                                Map<String, Object> postCurrentUserValues = currentUser.toMap();
-                                Map<String, Object> postFriendValues = friend.toMap();
-
-                                Map<String, Object> childUpdates = new HashMap<>();
-                                childUpdates.put("users/" + currentUserUid ,postCurrentUserValues);
-                                childUpdates.put("users/" + friend.getUid(),postFriendValues);
-                                databaseReference.updateChildren(childUpdates);
-
-
-
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                builder.show();
-            }
-        });
-
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                uids.clear();
-                notifications.clear();
-                users.clear();
+                try {
 
-                if(currentUserUid != null){
-                    if(dataSnapshot.child("users").child(currentUserUid).exists()){
-                        currentUser = dataSnapshot.child("users").child(currentUserUid).getValue(User.class);
-                        Log.d("user",currentUser.toString());
-                    }
 
-                    if(dataSnapshot.child("users").child(currentUserUid).child("receivedFriendRequestUids").exists()){
-                        String uid;
-                        for(DataSnapshot data : dataSnapshot.child("users").child(currentUserUid).child("receivedFriendRequestUids").getChildren()){
-                            uid = (String) data.getValue();
-                            uids.add(uid);
+                    uids.clear();
+                    notifications.clear();
+                    users.clear();
+
+                    if (currentUserUid != null) {
+                        if (dataSnapshot.child("users").child(currentUserUid).exists()) {
+                            currentUser = dataSnapshot.child("users").child(currentUserUid).getValue(User.class);
+                            Log.d("user", currentUser.toString());
                         }
+
+                        if (dataSnapshot.child("users").child(currentUserUid).child("receivedFriendRequestUids").exists()) {
+                            String uid;
+                            for (DataSnapshot data : dataSnapshot.child("users").child(currentUserUid).child("receivedFriendRequestUids").getChildren()) {
+                                uid = (String) data.getValue();
+                                uids.add(uid);
+                            }
+                        }
+
+                        User user;
+                        for (String uid : uids) {
+
+                            user = dataSnapshot.child("users").child(uid).getValue(User.class);
+                            users.add(user);
+                        }
+
+                        adapter.notifyDataSetChanged();
                     }
-
-                    User user;
-                    for(String uid : uids){
-
-                        user = dataSnapshot.child("users").child(uid).getValue(User.class);
-                        users.add(user);
-                        /*String fName = (String) dataSnapshot.child("users").child(uid).child("fName").getValue();
-                        String lName = (String) dataSnapshot.child("users").child(uid).child("lName").getValue();
-
-                        String notification = "Received friend request from " + fName + "," + lName;
-                        notifications.add(notification);*/
-                    }
-
-                    adapter.notifyDataSetChanged();
+                }catch (Exception e){
+                    Toast.makeText(getContext(), "Error occured.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -161,14 +121,7 @@ public class TabNotifications extends Fragment {
             }
         });
 
-
-
     }
 
-    void parseNotifications(){
 
-        for(String uid : uids){
-
-        }
-    }
 }

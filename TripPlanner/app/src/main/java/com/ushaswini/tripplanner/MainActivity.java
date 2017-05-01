@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,32 +27,57 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mFirebaseAuth = FirebaseAuth.getInstance();
+        try{
+            mFirebaseAuth = FirebaseAuth.getInstance();
+
+            if(!isConnectedOnline()){
+                Toast.makeText(this, "No Internet Connection.", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }catch (Exception e){
+            Toast.makeText(this, "Error occured.", Toast.LENGTH_SHORT).show();
+        }
+
+
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    //TODO tab activity
-                    Intent intent = new Intent(MainActivity.this,TabbedActivity.class);
-                    startActivity(intent);
-                    Log.d("demo", "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
 
-                    // User is signed out
-                    // Log.d(TAG, "onAuthStateChanged:signed_out");
+                try{
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    if (user != null) {
+                        Intent intent = new Intent(MainActivity.this,TabbedActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }
+                }catch (Exception e){
+                    Toast.makeText(MainActivity.this, "Error occured.", Toast.LENGTH_SHORT).show();
                 }
-                // ...
+
             }
         };
 
     }
 
 
+    public boolean isConnectedOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if (null != ni){
+            if(ni.isConnected()){
+                return true;
+            }else{
+                return false;
+            }
+
+        } else {
+            return false;
+        }
+    }
 
     @Override
     protected void onStart() {

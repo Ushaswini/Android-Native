@@ -1,9 +1,12 @@
 package com.ushaswini.tripplanner;
 
 
+import android.util.Log;
+
 import com.google.android.gms.location.places.Place;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +23,7 @@ public class TripDetails {
 
     ArrayList<MessageDetails> messages;
 
-    ArrayList<Place> places;
+    ArrayList<PlaceDetails> places;
 
     public ArrayList<MessageDetails> getMessages() {
         return messages;
@@ -86,6 +89,14 @@ public class TripDetails {
         this.organizer_id = organizer_id;
     }
 
+    public ArrayList<PlaceDetails> getPlaces() {
+        return places;
+    }
+
+    public void setPlaces(ArrayList<PlaceDetails> places) {
+        this.places = places;
+    }
+
     public void addFriendUid (String friendUid){
         if(friendsUids == null){
             friendsUids = new ArrayList<>();
@@ -100,16 +111,51 @@ public class TripDetails {
         messages.add(message);
     }
 
-    public void addPlaceToTrip(Place place){
+    public boolean addPlaceToTrip(PlaceDetails place){
+
+        boolean isAdded = false;
         if(places == null){
             places =  new ArrayList<>();
         }
-        places.add(place);
+        if(!places.contains(place)){
+            places.add(place);
+            isAdded = true;
+            Log.d("demo",isAdded +"");
+        }
+        return isAdded;
+    }
+
+    public void removeMemberFromTrip(String uid){
+        if(friendsUids != null){
+            friendsUids.remove(uid);
+        }
     }
 
     public void removePlaceFromTrip(Place place){
-        if(place != null){
+        if(places != null){
             places.remove(place);
+        }
+    }
+
+    public void addFriends(ArrayList<String> friendUid){
+        if(friendsUids == null){
+            friendsUids = new ArrayList<>();
+        }
+        friendsUids.addAll(friendUid);
+
+
+    }
+
+    public void addLocations(ArrayList<PlaceDetails> place){
+        if(places == null){
+            places = new ArrayList<>();
+        }
+        places.addAll(place);
+    }
+
+    public void swapLocations (int i,int j){
+        if(places != null){
+            Collections.swap(places,i,j);
         }
     }
 
@@ -132,10 +178,11 @@ public class TripDetails {
         result.put("location",location);
         result.put("imageUrl",imageUrl);
         result.put("trip_id",trip_id);
-        result.put("description",location);
+        result.put("description",description);
         result.put("organizer_id",organizer_id);
         result.put("friendsUids",friendsUids);
         result.put("messages",messages);
+        result.put("places",places);
 
 
         return result;

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -57,7 +58,7 @@ public class TabTrips extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab_trips, container, false);
-        currentUser = (User) getArguments().get("currentUser");
+        uid = (String) getArguments().get("currentUser");
 
         return rootView;
     }
@@ -66,108 +67,99 @@ public class TabTrips extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        your_trips = new ArrayList<>();
-        friends_trips = new ArrayList<>();
-        listOfTrips = new ArrayList<>();
+        try {
 
-        friendsUids = new ArrayList<>();
-        tripUids = new ArrayList<>();
 
-        addTrip = (FloatingActionButton) getView().findViewById(R.id.fab);
-        lv_your_trips = (ListView) getView().findViewById(R.id.your_trips);
-        lv_friend_trips = (ListView) getView().findViewById(R.id.friends_trips);
+            your_trips = new ArrayList<>();
+            friends_trips = new ArrayList<>();
+            listOfTrips = new ArrayList<>();
 
-        if(currentUser != null){
-            uid = currentUser.getUid();
+            friendsUids = new ArrayList<>();
+            tripUids = new ArrayList<>();
+
+            addTrip = (FloatingActionButton) getView().findViewById(R.id.fab);
+            lv_your_trips = (ListView) getView().findViewById(R.id.your_trips);
+            lv_friend_trips = (ListView) getView().findViewById(R.id.friends_trips);
+
+
+            your_adapter = new AdapterCustomTrip(getContext(), R.layout.custom_trip_row, your_trips, false);
+            lv_your_trips.setAdapter(your_adapter);
+            your_adapter.setNotifyOnChange(true);
+
+            friend_adapter = new AdapterCustomTrip(getContext(), R.layout.custom_trip_row, friends_trips, true);
+            lv_friend_trips.setAdapter(friend_adapter);
+            friend_adapter.setNotifyOnChange(true);
+
+            addTrip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.addTrip();
+                }
+            });
+
+            tripsDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
+        }catch (Exception e){
+            Toast.makeText(getContext(), "Error occured.", Toast.LENGTH_SHORT).show();
         }
-
-        your_adapter = new AdapterCustomTrip(getContext(),R.layout.custom_trip_row,your_trips,false);
-        lv_your_trips.setAdapter(your_adapter);
-        your_adapter.setNotifyOnChange(true);
-
-        friend_adapter = new AdapterCustomTrip(getContext(),R.layout.custom_trip_row,friends_trips,true);
-        lv_friend_trips.setAdapter(friend_adapter);
-        friend_adapter.setNotifyOnChange(true);
-
-        addTrip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            mListener.addTrip();
-            }
-        });
-
-        tripsDatabaseReference = FirebaseDatabase.getInstance().getReference();
-
-
 
         tripsDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(dataSnapshot.child("users").child(uid).exists()){
+                try {
+                    if (dataSnapshot.child("users").child(uid).exists()) {
 
-                    friendsUids.clear();
-                    tripUids.clear();
-                    friends_trips.clear();
-                    your_trips.clear();
+                        friendsUids.clear();
+                        tripUids.clear();
+                        friends_trips.clear();
+                        your_trips.clear();
 
-                    String friendUid;
-                    for(DataSnapshot data : dataSnapshot.child("users").child(uid).child("friendsUids").getChildren()){
-                        friendUid = (String) data.getValue();
-                        friendsUids.add(friendUid);
-                    }
-                }
-
-
-
-
-                if(dataSnapshot.child("users").child(uid).child("tripUids").exists()){
-
-                    TripDetails trip;
-                    String tripId;
-                    for(DataSnapshot data : dataSnapshot.child("users").child(uid).child("tripUids").getChildren() ){
-                        tripId = (String) data.getValue();
-                        tripUids.add(tripId);
-                        trip = dataSnapshot.child("trips").child(tripId).getValue(TripDetails.class);
-                        if(trip != null){
-                            your_trips.add(trip);
+                        String friendUid;
+                        for (DataSnapshot data : dataSnapshot.child("users").child(uid).child("friendsUids").getChildren()) {
+                            friendUid = (String) data.getValue();
+                            friendsUids.add(friendUid);
                         }
-
-
-
-                        //friends_trips.remove(trip);
                     }
-                }
 
-                for(String friendUid : friendsUids){
-                    if(dataSnapshot.child("users").child(friendUid).child("tripUids").exists()){
-                        String tripUid;
+                    if (dataSnapshot.child("users").child(uid).child("tripUids").exists()) {
+
                         TripDetails trip;
+                        String tripId;
+                        for (DataSnapshot data : dataSnapshot.child("users").child(uid).child("tripUids").getChildren()) {
+                            tripId = (String) data.getValue();
+                            tripUids.add(tripId);
+                            trip = dataSnapshot.child("trips").child(tripId).getValue(TripDetails.class);
+                            if (trip != null) {
+                                your_trips.add(trip);
+                            }
+                        }
+                    }
 
-                        for(DataSnapshot data : dataSnapshot.child("users").child(friendUid).child("tripUids").getChildren()){
-                            tripUid  = (String) data.getValue();
+                    for (String friendUid : friendsUids) {
+                        if (dataSnapshot.child("users").child(friendUid).child("tripUids").exists()) {
+                            String tripUid;
+                            TripDetails trip;
 
-                            if(!tripUids.contains(tripUid)){
-                                trip = dataSnapshot.child("trips").child(tripUid).getValue(TripDetails.class);
-                                if(trip != null){
-                                    friends_trips.add(trip);
+                            for (DataSnapshot data : dataSnapshot.child("users").child(friendUid).child("tripUids").getChildren()) {
+                                tripUid = (String) data.getValue();
+
+                                if (!tripUids.contains(tripUid)) {
+                                    trip = dataSnapshot.child("trips").child(tripUid).getValue(TripDetails.class);
+                                    if (trip != null) {
+                                        friends_trips.add(trip);
+                                    }
                                 }
                             }
-
-
                         }
                     }
 
+                    your_adapter.notifyDataSetChanged();
+                    friend_adapter.notifyDataSetChanged();
+
+                }catch (Exception e){
+                    Toast.makeText(getContext(), "Error occured.", Toast.LENGTH_SHORT).show();
                 }
-
-
-
-
-
-                your_adapter.notifyDataSetChanged();
-                friend_adapter.notifyDataSetChanged();
-
-
             }
 
             @Override
@@ -176,45 +168,6 @@ public class TabTrips extends Fragment {
             }
         });
 
-
-        /*tripsDatabaseReference = FirebaseDatabase.getInstance().getReference("trips");
-
-        tripsDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                your_trips.clear();
-                friends_trips.clear();
-                listOfTrips.clear();
-
-                for(DataSnapshot data : dataSnapshot.getChildren()){
-                    TripDetails trip = data.getValue(TripDetails.class);
-                    listOfTrips.add(trip);
-
-                }
-                separateListOfTrips();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-    }
-
-
-
-    private void separateListOfTrips(){
-        for(TripDetails trip : listOfTrips){
-            if(trip.getFriendsUids().contains(uid)){
-                your_trips.add(trip);
-            }else{
-                friends_trips.add(trip);
-            }
-        }
-
-        your_adapter.notifyDataSetChanged();
-        friend_adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -226,11 +179,6 @@ public class TabTrips extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-    }
-
-    public void postYourTrips(ArrayList<TripDetails> trips){
-        this.your_trips = trips;
-        your_adapter.notifyDataSetChanged();
     }
 
     interface TripListner{

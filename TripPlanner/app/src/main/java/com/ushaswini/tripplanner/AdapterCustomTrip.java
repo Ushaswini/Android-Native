@@ -75,7 +75,11 @@ public class AdapterCustomTrip extends ArrayAdapter<TripDetails> {
 
         title.setText(trip.getTitle());
         location.setText(trip.getLocation());
-        Picasso.with(mContext).load(trip.getImageUrl()).into(imageView);
+
+        Picasso.with(mContext).
+                load(trip.getImageUrl()).
+                placeholder(R.mipmap.ic_loading_placeholder).
+                into(imageView);
 
         if(isNew){
             btn.setText("JOIN");

@@ -26,6 +26,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -46,13 +51,16 @@ public class TabSettings extends Fragment {
 
     ImageButton imChangeImage;
     User currentUser;
+    String uid;
     RadioGroup radioGroup;
     RadioButton maleBtn;
     RadioButton femaleBtn;
     User.GENDER gender;
-    //Bundle args;
 
     private handleSaveChanges mListener;
+    DatabaseReference databaseReference;
+    ValueEventListener databaseChangeListener;
+
 
 
 
@@ -61,7 +69,8 @@ public class TabSettings extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab_settings, container, false);
-        currentUser = (User) getArguments().get("currentUser");
+        uid = (String) getArguments().get("currentUser");
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         return rootView;
     }
@@ -69,32 +78,71 @@ public class TabSettings extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        btnSave = (Button) getView().findViewById(R.id.btn_save);
-        etFirstName = (EditText) getView().findViewById(R.id.et_first_name);
-        etLastName = (EditText) getView().findViewById(R.id.et_last_name);
-        imChangeImage = (ImageButton) getView().findViewById(R.id.im_change_image);
-        etOldPassword = (EditText) getView().findViewById(R.id.et_password);
-        etNewPassword = (EditText) getView().findViewById(R.id.et_newPassword);
-        btnChangePassword = (Button) getView().findViewById(R.id.btn_change_password);
 
-        radioGroup = (RadioGroup) getView().findViewById(R.id.radioGroup);
-        maleBtn = (RadioButton) getView().findViewById(R.id.male);
-        femaleBtn = (RadioButton) getView().findViewById(R.id.female);
+        try {
 
 
+            btnSave = (Button) getView().findViewById(R.id.btn_save);
+            etFirstName = (EditText) getView().findViewById(R.id.et_first_name);
+            etLastName = (EditText) getView().findViewById(R.id.et_last_name);
+            imChangeImage = (ImageButton) getView().findViewById(R.id.im_change_image);
+            etOldPassword = (EditText) getView().findViewById(R.id.et_password);
+            etNewPassword = (EditText) getView().findViewById(R.id.et_newPassword);
+            btnChangePassword = (Button) getView().findViewById(R.id.btn_change_password);
 
-        etFirstName.setText(currentUser.getfName());
-        etLastName.setText(currentUser.getlName());
-        btnSave.setOnClickListener(save_click_listener);
-        btnChangePassword.setOnClickListener(change_password_listener);
-        imChangeImage.setOnClickListener(change_image_listener);
-        Picasso.with(getContext()).load(currentUser.getImageUrl()).into(imChangeImage);
+            radioGroup = (RadioGroup) getView().findViewById(R.id.radioGroup);
+            maleBtn = (RadioButton) getView().findViewById(R.id.male);
+            femaleBtn = (RadioButton) getView().findViewById(R.id.female);
 
-        if(currentUser.getGender() == User.GENDER.FEMALE){
-            femaleBtn.setChecked(true);
-        }else{
-            maleBtn.setChecked(true);
+
+        }catch (Exception e){
+            Toast.makeText(getContext(), "Error occured.", Toast.LENGTH_SHORT).show();
         }
+        databaseChangeListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                try {
+
+
+                    if (uid != null) {
+                        if (dataSnapshot.child("users").child(uid).exists()) {
+                            currentUser = dataSnapshot.child("users").child(uid).getValue(User.class);
+                            Log.d("user", currentUser.toString());
+                            etFirstName.setText(currentUser.getfName());
+                            etLastName.setText(currentUser.getlName());
+                            btnSave.setOnClickListener(save_click_listener);
+                            btnChangePassword.setOnClickListener(change_password_listener);
+                            imChangeImage.setOnClickListener(change_image_listener);
+                            Picasso.with(getContext()).
+                                    load(currentUser.getImageUrl()).
+                                    placeholder(R.mipmap.ic_loading_placeholder).
+                                    into(imChangeImage);
+
+                            if (currentUser.getGender() == User.GENDER.FEMALE) {
+                                femaleBtn.setChecked(true);
+                            } else {
+                                maleBtn.setChecked(true);
+                            }
+                        }
+                    }
+                }catch (Exception e){
+                    Toast.makeText(getContext(), "Error occured.", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        databaseReference.addValueEventListener(databaseChangeListener);
+
+
+
+
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -113,22 +161,36 @@ public class TabSettings extends Fragment {
         @Override
         public void onClick(View v) {
 
+            try{
+
+
             String fName = etFirstName.getText().toString();
             String lName = etLastName.getText().toString();
 
             mListener.saveChanges(fName,lName,gender);
+            }catch (Exception e){
+                Toast.makeText(getContext(), "Error occured.", Toast.LENGTH_SHORT).show();
+            }
+
         }
     };
 
     View.OnClickListener change_password_listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String oldPassword = etOldPassword.getText().toString();
-            String newPassword = etNewPassword.getText().toString();
-            if(oldPassword.equals("") || newPassword.equals("")){
-                Toast.makeText( getContext(), "Passwords cannot be empty.", Toast.LENGTH_SHORT).show();
+
+            try{
+                String oldPassword = etOldPassword.getText().toString();
+                String newPassword = etNewPassword.getText().toString();
+                if(oldPassword.equals("") || newPassword.equals("")){
+                    Toast.makeText( getContext(), "Passwords cannot be empty.", Toast.LENGTH_SHORT).show();
+                }
+                mListener.changePassword (oldPassword,newPassword);
+            }catch (Exception e){
+                Toast.makeText(getContext(), "Error occured.", Toast.LENGTH_SHORT).show();
             }
-            mListener.changePassword (oldPassword,newPassword);
+
+
         }
     };
 
@@ -151,7 +213,10 @@ public class TabSettings extends Fragment {
     }
 
     public void postCurrentUserImage(String url){
-        Picasso.with(getContext()).load(url).into(imChangeImage);
+        Picasso.with(getContext()).
+                load(url).
+                placeholder(R.mipmap.ic_loading_placeholder).
+                into(imChangeImage);
 
 
 

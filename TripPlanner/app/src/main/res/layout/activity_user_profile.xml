@@ -8,11 +8,12 @@
 
     <ImageView
         android:id="@+id/image_avtar"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
+        android:background="@drawable/rounded_image_button"
         app:srcCompat="@drawable/ic_person" />
 
     <TextView

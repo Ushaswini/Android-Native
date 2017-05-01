@@ -32,16 +32,25 @@ public class AdapterFriends extends ArrayAdapter<User> {
 
     int mResource;
 
+    boolean isLongClickReq;
+
+    boolean isOnClickReq;
+
+    boolean showActionButton;
+
 
     IHandleConnect iHandleConnect;
 
 
-    public AdapterFriends(@NonNull Context context, @LayoutRes int resource, @NonNull ArrayList<User> objects) {
+    public AdapterFriends(@NonNull Context context, @LayoutRes int resource, @NonNull ArrayList<User> objects, boolean isOnClickRequired, boolean isLongClickRequired, boolean showActionButton) {
         super(context, resource, objects);
         this.mContext = context;
         this.friends = objects;
         this.mResource = resource;
         this.iHandleConnect = (IHandleConnect) context;
+        this.isLongClickReq = isLongClickRequired;
+        this.isOnClickReq = isOnClickRequired;
+        this.showActionButton = showActionButton;
     }
 
     @NonNull
@@ -67,12 +76,25 @@ public class AdapterFriends extends ArrayAdapter<User> {
         holder = (ViewHolder_Friend) convertView.getTag();
         TextView title = holder.textView;
         ImageView imageView = holder.imageView;
+
+
         final ImageButton imageButton = holder.imageButton;
 
-        String details = friend.getfName() + "," + friend.getlName() + "\n" + friend.getGender();
+        if(showActionButton){
+            imageButton.setVisibility(View.VISIBLE);
+        }else{
+            imageButton.setVisibility(View.INVISIBLE);
+        }
+
+
+
+        String details = friend.getfName() + "," + friend.getlName() + "\n" + ((friend.getGender() == null) ? "" : friend.getGender());
 
         title.setText(details);
-        Picasso.with(mContext).load(friend.getImageUrl()).into(imageView);
+        Picasso.with(mContext).
+                load(friend.getImageUrl()).
+                placeholder(R.mipmap.ic_loading_placeholder).
+                into(imageView);
 
 
         switch (friend.getStatus()){
@@ -111,14 +133,14 @@ public class AdapterFriends extends ArrayAdapter<User> {
                     }
                     case RECEIVED:{
                         iHandleConnect.displayReceivedMessage(friend);
-                        imageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_friend));
+                        imageButton.setImageResource(R.drawable.ic_friend);
                         break;
                     }
 
                     case UNCONNECTED:
                         {
                             iHandleConnect.addFriend(friend);
-                            imageButton.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.ic_sent));
+                            imageButton.setImageResource(R.mipmap.ic_sent);
                             break;
 
 
@@ -130,12 +152,27 @@ public class AdapterFriends extends ArrayAdapter<User> {
             }
         });
 
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                iHandleConnect.selectFriend(position,v);
-            }
-        });
+        if(isOnClickReq){
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    iHandleConnect.selectFriend(position,v);
+                }
+            });
+        }
+
+        if(isLongClickReq){
+            convertView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    iHandleConnect.removeFriendFromTrip(position);
+                    return false;
+                }
+            });
+        }
+
+
+
 
         return convertView;
     }
@@ -146,5 +183,6 @@ public class AdapterFriends extends ArrayAdapter<User> {
         void displaySentMessage();
         void removeFriend(User user);
         void selectFriend(int position, View v);
+        void removeFriendFromTrip(int position);
     }
 }

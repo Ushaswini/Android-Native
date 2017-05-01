@@ -9,12 +9,12 @@
 
     <ImageButton
         android:id="@+id/im_coverphoto"
-        android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:background="@android:color/background_light" />
+        android:background="@mipmap/ic_trip" />
 
     <EditText
         android:id="@+id/et_trip_name"
@@ -27,6 +27,15 @@
         android:hint="Trip name"
         android:inputType="textPersonName" />
 
+    <com.ushaswini.tripplanner.CustomAutoCompleteTextView
+        android:id="@+id/at_destination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/et_trip_details"
+        android:layout_marginTop="28dp"
+        android:completionHint="Trip Destination" />
     <EditText
         android:id="@+id/et_trip_details"
         android:layout_width="match_parent"
@@ -67,15 +76,4 @@
         android:background="@color/colorPrimary"
         android:text="Cancel" />
 
-    <EditText
-        android:id="@+id/et_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:ems="10"
-        android:hint="Trip Destination"
-        android:inputType="textPersonName"
-        android:layout_below="@+id/et_trip_details"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 </RelativeLayout>

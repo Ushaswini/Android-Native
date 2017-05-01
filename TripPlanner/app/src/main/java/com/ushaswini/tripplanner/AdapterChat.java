@@ -62,7 +62,10 @@ public class AdapterChat extends ArrayAdapter<MessageDetails> {
 
             String details = message.getUser_name() + "\n" + time.format(message.getPosted_time());
             tv_details.setText(details);
-            Picasso.with(mContext).load(message.getImage_url()).into(image);
+            Picasso.with(mContext).
+                    load(message.getImage_url()).
+                    placeholder(R.mipmap.ic_loading_placeholder).
+                    into(image);
 
             ArrayList<Comment> comments = message.getComments();
 
@@ -88,14 +91,14 @@ public class AdapterChat extends ArrayAdapter<MessageDetails> {
             im_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    iShareData.deleteMessage(position);
+                    iShareData.deleteMessage(message);
                 }
             });
 
             im_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    iShareData.postComment(position);
+                    iShareData.postComment(message);
                 }
             });
 
@@ -122,14 +125,14 @@ public class AdapterChat extends ArrayAdapter<MessageDetails> {
             im_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    iShareData.postComment(position);
+                    iShareData.postComment(message);
                 }
             });
 
             im_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    iShareData.deleteMessage(position);
+                    iShareData.deleteMessage(message);
                 }
             });
 
@@ -162,9 +165,9 @@ public class AdapterChat extends ArrayAdapter<MessageDetails> {
     }
 
     interface  IShareData{
-        void postComment(int position);
+        void postComment(MessageDetails message);
 
-        void deleteMessage(int position);
+        void deleteMessage(MessageDetails message);
 
     }
 }

@@ -88,7 +88,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/et_confirm_password"
         android:layout_marginBottom="11dp"
-        android:background="@android:color/holo_blue_dark"
+        android:background="?android:attr/colorPrimary"
         android:text="@string/signup"
         android:textAllCaps="false" />
 
@@ -112,7 +112,7 @@
         android:layout_below="@+id/tv_title"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/rounded_image_button"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/ic_person" />
 

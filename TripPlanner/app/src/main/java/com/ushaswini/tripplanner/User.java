@@ -25,7 +25,7 @@ public class User implements Serializable {
     private ArrayList<String> tripUids;
 
     enum GENDER{
-        MALE , FEMALE;
+        MALE , FEMALE,NOT_SET;
     }
 
     enum FRIEND_STATUS{
@@ -134,6 +134,12 @@ public class User implements Serializable {
 
     public void setSentFriendRequestUids(ArrayList<String> sentFriendRequestUids) {
         this.sentFriendRequestUids = sentFriendRequestUids;
+    }
+
+    public void removeTripId(String tripId){
+        if(tripUids != null){
+            tripUids.remove(tripId);
+        }
     }
 
     public User(String fName, String lName, String imageUrl, String uid) {

@@ -1,6 +1,7 @@
 package com.ushaswini.tripplanner;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
@@ -65,45 +66,67 @@ public class SignupActivity extends AppCompatActivity {
     Bitmap bitmap;
     User.GENDER gender;
 
+    public boolean isConnectedOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if (null != ni){
+            if(ni.isConnected()){
+                return true;
+            }else{
+                return false;
+            }
+
+        } else {
+            return false;
+        }
+    }
+
 
     View.OnClickListener signUp_click_listner = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            final String  email,choose_password, repeat_password;
-            fName = etFName.getText().toString();
-            lName = etLName.getText().toString();
-            email = etEmail.getText().toString();
-            choose_password = etChoosePassword.getText().toString();
-            repeat_password = etRepeatPassword.getText().toString();
 
-            if(fName.equals("") || lName.equals("") || email.equals("") ||choose_password.equals("") || repeat_password.equals("")){
-                Toast.makeText(SignupActivity.this,"Enter all details",Toast.LENGTH_SHORT).show();
-            }else{
-                if(!choose_password.equals(repeat_password)){
-                    Toast.makeText(SignupActivity.this,"Passwords don't match",Toast.LENGTH_SHORT).show();
-                }else {
+            try{
+                final String  email,choose_password, repeat_password;
+                fName = etFName.getText().toString();
+                lName = etLName.getText().toString();
+                email = etEmail.getText().toString();
+                choose_password = etChoosePassword.getText().toString();
+                repeat_password = etRepeatPassword.getText().toString();
 
-                    mFirebaseAuth.createUserWithEmailAndPassword(email,choose_password)
-                            .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if(!task.isSuccessful()){
-                                        Toast.makeText(SignupActivity.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        Toast.makeText(SignupActivity.this,"Account successfully created",Toast.LENGTH_SHORT).show();
-                                        FirebaseAuth.getInstance().signOut();
+                if(fName.equals("") || lName.equals("") || email.equals("") ||choose_password.equals("") || repeat_password.equals("")){
+                    Toast.makeText(SignupActivity.this,"Enter all details",Toast.LENGTH_SHORT).show();
+                }else{
+                    if(!choose_password.equals(repeat_password)){
+                        Toast.makeText(SignupActivity.this,"Passwords don't match",Toast.LENGTH_SHORT).show();
+                    }else {
 
-                                        Intent intent = new Intent(SignupActivity.this,LoginActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        startActivity(intent);
+                        mFirebaseAuth.createUserWithEmailAndPassword(email,choose_password)
+                                .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if(!task.isSuccessful()){
+                                            Toast.makeText(SignupActivity.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                                        }else{
+                                            Toast.makeText(SignupActivity.this,"Account successfully created",Toast.LENGTH_SHORT).show();
+                                            FirebaseAuth.getInstance().signOut();
 
-                                        //TODO LOGIN ACTIVITY
+                                            Intent intent = new Intent(SignupActivity.this,LoginActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            startActivity(intent);
 
+                                            //TODO LOGIN ACTIVITY
+
+                                        }
                                     }
-                                }
-                            });
+                                });
+                    }
                 }
+            }catch (Exception e){
+                Toast.makeText(SignupActivity.this, "Error occured.", Toast.LENGTH_SHORT).show();
             }
+
 
 
         }
@@ -117,10 +140,15 @@ public class SignupActivity extends AppCompatActivity {
     View.OnClickListener choose_avtar_click_listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);//
-            startActivityForResult(Intent.createChooser(intent, "Select Picture"),ACTIVITY_SELECT_IMAGE);
+            try{
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);//
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"),ACTIVITY_SELECT_IMAGE);
+            }catch (Exception e){
+                Toast.makeText(SignupActivity.this, "Error occured.", Toast.LENGTH_SHORT).show();
+            }
+
         }
     };
 
@@ -131,29 +159,40 @@ public class SignupActivity extends AppCompatActivity {
 
         setTitle("Sign Up");
 
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
+        try{
+            if(!isConnectedOnline()){
+                Toast.makeText(this, "No Internet Connection.", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            mFirebaseAuth = FirebaseAuth.getInstance();
+            storage = FirebaseStorage.getInstance();
+            storageReference = storage.getReference();
 
 
-        etFName = (EditText) findViewById(R.id.et_firstName);
-        etLName = (EditText) findViewById(R.id.et_lastName);
-        etEmail = (EditText) findViewById(R.id.et_email);
-        etChoosePassword = (EditText) findViewById(R.id.et_password);
-        etRepeatPassword = (EditText) findViewById(R.id.et_confirm_password);
-        btnSignup = (Button) findViewById(R.id.btn_signup);
-        btnCancel = (Button) findViewById(R.id.btn_cancel);
-        btnChooseAvtar = (ImageButton) findViewById(R.id.im_choose_avtar);
-        genderRadioGroup = (RadioGroup) findViewById(R.id.genderRadioGroup);
+            etFName = (EditText) findViewById(R.id.et_firstName);
+            etLName = (EditText) findViewById(R.id.et_lastName);
+            etEmail = (EditText) findViewById(R.id.et_email);
+            etChoosePassword = (EditText) findViewById(R.id.et_password);
+            etRepeatPassword = (EditText) findViewById(R.id.et_confirm_password);
+            btnSignup = (Button) findViewById(R.id.btn_signup);
+            btnCancel = (Button) findViewById(R.id.btn_cancel);
+            btnChooseAvtar = (ImageButton) findViewById(R.id.im_choose_avtar);
+            genderRadioGroup = (RadioGroup) findViewById(R.id.genderRadioGroup);
 
 
-        btnSignup.setOnClickListener(signUp_click_listner);
-        btnCancel.setOnClickListener(cancel_click_listener);
-        btnChooseAvtar.setOnClickListener(choose_avtar_click_listener);
+            btnSignup.setOnClickListener(signUp_click_listner);
+            btnCancel.setOnClickListener(cancel_click_listener);
+            btnChooseAvtar.setOnClickListener(choose_avtar_click_listener);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        imageUid = UUID.randomUUID().toString();
+            imageUid = UUID.randomUUID().toString();
+        }catch (Exception e){
+            Toast.makeText(this, "Error occured.", Toast.LENGTH_SHORT).show();
+        }
+
+
 
         genderRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -169,45 +208,51 @@ public class SignupActivity extends AppCompatActivity {
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                final FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-                if (currentUser != null) {
 
-                    UserProfileChangeRequest changeRequest = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(fName + "," + lName)
-                            .setPhotoUri(imageUri)
-                            .build();
+                try{
+                    final FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                    if (currentUser != null) {
+
+                        UserProfileChangeRequest changeRequest = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(fName + "," + lName)
+                                .setPhotoUri(imageUri)
+                                .build();
 
 
-                    currentUser.updateProfile(changeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
+                        currentUser.updateProfile(changeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
 
-                                if(currentUser != null){
-                                    if(currentUser.getDisplayName() != null){
-                                        String displayName = currentUser.getDisplayName();
-                                        String[] names = displayName.split(",");
-                                        String fName = names[0];
-                                        String lName = names[1];
-                                        if(currentUser.getPhotoUrl() != null){
-                                            String imageUrl = currentUser.getPhotoUrl().toString();
-                                            String user_id =  currentUser.getUid();
-                                            User user = new User(fName,lName,imageUrl,user_id);
-                                            user.setImageUid(imageUid);
-                                            user.setGender(gender);
+                                    if(currentUser != null){
+                                        if(currentUser.getDisplayName() != null){
+                                            String displayName = currentUser.getDisplayName();
+                                            String[] names = displayName.split(",");
+                                            String fName = names[0];
+                                            String lName = names[1];
+                                            if(currentUser.getPhotoUrl() != null){
+                                                String imageUrl = currentUser.getPhotoUrl().toString();
+                                                String user_id =  currentUser.getUid();
+                                                User user = new User(fName,lName,imageUrl,user_id);
+                                                user.setImageUid(imageUid);
+                                                user.setGender(gender);
 
-                                            Map<String, Object> postValues = user.toMap();
-                                            Map<String, Object> childUpdates = new HashMap<>();
-                                            childUpdates.put("/users/" + user_id,postValues);
-                                            databaseReference.updateChildren(childUpdates);
+                                                Map<String, Object> postValues = user.toMap();
+                                                Map<String, Object> childUpdates = new HashMap<>();
+                                                childUpdates.put("/users/" + user_id,postValues);
+                                                databaseReference.updateChildren(childUpdates);
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                    });
+                        });
 
+                    }
+                }catch (Exception e){
+                    Toast.makeText(SignupActivity.this, "Error occured.", Toast.LENGTH_SHORT).show();
                 }
+
             }
         };
     }
@@ -228,21 +273,27 @@ public class SignupActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == ACTIVITY_SELECT_IMAGE) {
-            if (resultCode == Activity.RESULT_OK) {
-                if (data != null) {
-                    try {
+        try{
+            if (requestCode == ACTIVITY_SELECT_IMAGE) {
+                if (resultCode == Activity.RESULT_OK) {
+                    if (data != null) {
+                        try {
 
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
-                        storeImage(bitmap);
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+                            storeImage(bitmap);
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
                     }
-
                 }
             }
+        }catch (Exception e){
+            Toast.makeText(this, "Error occured.", Toast.LENGTH_SHORT).show();
         }
+
+
     }
     void storeImage(Bitmap bitmap){
 

@@ -4,10 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyBhunOhwnb0an-kned-sc64B-2lcO3F0eY"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -16,6 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAJI7ReMzRbUCO_ZUd0iQzNsFMu3ooousc" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,13 +39,10 @@
         </activity>
         <activity android:name=".AddTripActivity" />
         <activity android:name=".ViewTripActivity">
-
             <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyBhunOhwnb0an-kned-sc64B-2lcO3F0eY"/>
-
+                android:value="AIzaSyAJI7ReMzRbUCO_ZUd0iQzNsFMu3ooousc" />
         </activity>
-
         <activity android:name=".JoinTripActivity" />
         <activity android:name=".UserProfileActivity" />
         <activity
@@ -57,7 +58,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddFriendToTripActivity"></activity>
+        <activity android:name=".AddFriendToTripActivity" />
+        <activity android:name=".EditPlacesActivity" />
+        <activity android:name=".MapViewOfPlacesActivity" />
+        <activity android:name=".AddFriendToNewTripActivity"></activity>
     </application>
 
 </manifest>
