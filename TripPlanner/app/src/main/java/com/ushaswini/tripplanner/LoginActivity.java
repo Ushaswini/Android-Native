@@ -28,9 +28,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +52,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     SignInButton btnSignInButton;
     GoogleApiClient mGoogleApiClient;
+
+    ArrayList<String> uids;
 
 
 
@@ -109,6 +115,27 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             mFirebaseAuth = FirebaseAuth.getInstance();
             databaseReference = FirebaseDatabase.getInstance().getReference();
 
+            uids = new ArrayList<>();
+
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                User user;
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    uids.clear();
+
+                    for(DataSnapshot data : dataSnapshot.child("users").getChildren()){
+                        user = data.getValue(User.class);
+                        uids.add(user.getUid());
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
 
             etEmail = (EditText) findViewById(R.id.et_email);
             etPassword = (EditText) findViewById(R.id.et_password);
@@ -134,6 +161,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build();
+
         }catch (Exception e){
             Toast.makeText(this, "Error occured.", Toast.LENGTH_SHORT).show();
         }
@@ -184,35 +212,45 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+
                         if (!task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, "Log in not successful", Toast.LENGTH_SHORT).show();
                         } else {
 
                             FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
 
+
+
                             if(currentUser != null){
 
                                 if(currentUser.getDisplayName() != null){
 
-                                    if(currentUser.getPhotoUrl() != null){
+                                    if(!uids.contains(currentUser.getUid())){
 
-                                        String imageUrl = currentUser.getPhotoUrl().toString();
-                                        String user_id =  currentUser.getUid();
-                                        String fName = acct.getGivenName();
-                                        String lName = acct.getFamilyName();
+                                        if(currentUser.getPhotoUrl() != null){
 
-                                        User user = new User(fName,lName,imageUrl,user_id);
+                                            String imageUrl = currentUser.getPhotoUrl().toString();
+                                            String user_id =  currentUser.getUid();
+                                            String fName = acct.getGivenName();
+                                            String lName = acct.getFamilyName();
 
-                                        Map<String, Object> postValues = user.toMap();
-                                        Map<String, Object> childUpdates = new HashMap<>();
-                                        childUpdates.put("/users/" + user_id,postValues);
-                                        databaseReference.updateChildren(childUpdates);
+                                            User user = new User(fName,lName,imageUrl,user_id);
+
+                                            Map<String, Object> postValues = user.toMap();
+                                            Map<String, Object> childUpdates = new HashMap<>();
+                                            childUpdates.put("/users/" + user_id,postValues);
+                                            databaseReference.updateChildren(childUpdates);
+                                        }
+
                                     }
+
+
                                 }
                             }
                             Toast.makeText(LoginActivity.this, "Log in successful", Toast.LENGTH_SHORT).show();
 
                             //TODO START TAB ACTIVITY
+                            Auth.GoogleSignInApi.signOut(mGoogleApiClient);
                             Intent intent = new Intent(LoginActivity.this, TabbedActivity.class);
                             startActivity(intent);
                         }

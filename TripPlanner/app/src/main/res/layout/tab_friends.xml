@@ -12,13 +12,14 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:text="@string/your_friends"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textSize="18sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:textStyle="bold|italic" />
 
     <ListView
         android:id="@+id/lt_your_friends"
@@ -40,7 +41,8 @@
         android:text="Discover Friends"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textStyle="bold|italic" />
 
     <ListView
         android:id="@+id/lt_add_friends"

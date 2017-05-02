@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -152,7 +153,7 @@ public class SearchResultsActivity extends AppCompatActivity implements AdapterF
     }
 
     @Override
-    public void addFriend(User friendUser) {
+    public void addFriend(User friendUser, final View v) {
         try{
             currentUser.addToSentFriendRequestUid(friendUser.getUid());
             friendUser.addToReceivedFriendRequestUid(currentUser.getUid());
@@ -166,7 +167,13 @@ public class SearchResultsActivity extends AppCompatActivity implements AdapterF
             childUpdates.put("/users/" + currentUser.getUid()  ,postCurrentUser);
             childUpdates.put("/users/" + friendUser.getUid(),postUser);
 
-            databaseReference.updateChildren(childUpdates);
+            databaseReference.updateChildren(childUpdates, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    ((ImageButton)v).setImageResource(R.mipmap.ic_sent);
+
+                }
+            });
 
             Toast.makeText(this, "Friend request sent", Toast.LENGTH_SHORT).show();
         }catch (Exception e){

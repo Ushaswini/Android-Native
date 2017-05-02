@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -201,7 +202,7 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
                                 load(currentTrip.getImageUrl()).
                                 placeholder(R.mipmap.ic_loading_placeholder).
                                 into(imCoverPhoto);
-                        tvTripDetails.setText(currentTrip.getTitle() +  "\n" + currentTrip.getLocation());
+                        tvTripDetails.setText(currentTrip.getTitle() +  "\n" + currentTrip.getDescription());
                     }
                 }catch (Exception e){
                     Toast.makeText(ViewTripActivity.this, "Error occured.", Toast.LENGTH_SHORT).show();
@@ -316,6 +317,25 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
                         startActivity(i);
                         break;
                     }
+                    case R.id.action_navigate:{
+
+                        PlaceDetails place = currentTrip.getPlaces().get(0);
+
+                        //for(PlaceDetails place : currentTrip.getPlaces()){
+                            // Create a Uri from an intent string. Use the result to create an Intent.
+                            Uri gmmIntentUri = Uri.parse("google.navigation:q=" + place.getLat() + ", " + place.getLng());
+
+                            // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                            // Make the Intent explicit by setting the Google Maps package
+                            mapIntent.setPackage("com.google.android.apps.maps");
+
+                            // Attempt to start an activity that can handle the Intent
+                            startActivityForResult(mapIntent,100);
+                        //}
+
+                        break;
+                    }
 
                 }
 
@@ -397,6 +417,26 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
                                     }
                                 });
                         builder.show();
+                        break;
+                    }
+
+                    case R.id.action_navigate:{
+
+                        PlaceDetails place = currentTrip.getPlaces().get(0);
+
+                        //for(PlaceDetails place : currentTrip.getPlaces()){
+                        // Create a Uri from an intent string. Use the result to create an Intent.
+                        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + place.getLat() + ", " + place.getLng() + "&mode=d");
+
+                        // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        // Make the Intent explicit by setting the Google Maps package
+                        mapIntent.setPackage("com.google.android.apps.maps");
+
+                        // Attempt to start an activity that can handle the Intent
+                        startActivityForResult(mapIntent,100);
+                        //}
+
                         break;
                     }
                 }
@@ -544,6 +584,10 @@ public class ViewTripActivity extends AppCompatActivity implements AdapterChat.I
                     Log.d("demo",e.getLocalizedMessage());
 
                 }
+                break;
+            }
+            case 100:{
+
                 break;
             }
         }

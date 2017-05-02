@@ -181,7 +181,7 @@ public class JoinTripActivity extends AppCompatActivity implements AdapterFriend
                                 load(currentTrip.getImageUrl()).
                                 placeholder(R.mipmap.ic_loading_placeholder).
                                 into(imCoverPhoto);
-                        tvTripDetails.setText(currentTrip.getTitle() + "\n" + currentTrip.getLocation());
+                        tvTripDetails.setText(currentTrip.getTitle() + "\n" + currentTrip.getDescription());
 
 
                     }
@@ -274,7 +274,7 @@ public class JoinTripActivity extends AppCompatActivity implements AdapterFriend
     }
 
     @Override
-    public void addFriend(User friendUser) {
+    public void addFriend(User friendUser, final View v) {
 
         try{
             user.addToSentFriendRequestUid(friendUser.getUid());
@@ -289,7 +289,13 @@ public class JoinTripActivity extends AppCompatActivity implements AdapterFriend
             childUpdates.put("/users/" + user.getUid()  ,postCurrentUser);
             childUpdates.put("/users/" + friendUser.getUid(),postUser);
 
-            databaseReference.updateChildren(childUpdates);
+            databaseReference.updateChildren(childUpdates, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    ((ImageButton)v).setImageResource(R.mipmap.ic_sent);
+
+                }
+            });
         }catch (Exception e){
             Toast.makeText(this, "Error occured.", Toast.LENGTH_SHORT).show();
         }

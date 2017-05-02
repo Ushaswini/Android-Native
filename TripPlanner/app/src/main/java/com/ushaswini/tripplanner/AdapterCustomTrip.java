@@ -74,7 +74,7 @@ public class AdapterCustomTrip extends ArrayAdapter<TripDetails> {
         Button btn = holder.button;
 
         title.setText(trip.getTitle());
-        location.setText(trip.getLocation());
+        location.setText(trip.getDescription());
 
         Picasso.with(mContext).
                 load(trip.getImageUrl()).

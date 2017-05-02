@@ -39,6 +39,8 @@ public class AddFriendToNewTripActivity extends AppCompatActivity implements Ada
     ArrayList<String> friendsInCurrentTrips;
     ArrayList<Integer> selectedPositions;
 
+    ArrayList<User> membersToAdd;
+
     AdapterFriends adapter;
     ListView lt_friends;
     TextView tv_status;
@@ -62,6 +64,8 @@ public class AddFriendToNewTripActivity extends AppCompatActivity implements Ada
             friendUids = new ArrayList<>();
             friendsInCurrentTrips = new ArrayList<>();
             selectedPositions = new ArrayList<>();
+
+            membersToAdd = new ArrayList<>();
 
             lt_friends = (ListView) findViewById(R.id.lt_friends);
             adapter = new AdapterFriends(this, R.layout.custom_friend_row, friends,true,false,false);
@@ -179,11 +183,13 @@ public class AddFriendToNewTripActivity extends AppCompatActivity implements Ada
                     for (int position : selectedPositions) {
                         uid = friends.get(position).getUid();
                         currentTrip.addFriendUid(uid);
+                        membersToAdd.add(friends.get(position));
                     }
 
                     if(selectedPositions.size() > 0){
                         Intent intent = new Intent();
                         intent.putExtra("friends_to_add",currentTrip.getFriendsUids());
+                        intent.putExtra("members",membersToAdd);
                         setResult(RESULT_OK,intent);
                         finish();
 
@@ -222,7 +228,7 @@ public class AddFriendToNewTripActivity extends AppCompatActivity implements Ada
     }
 
     @Override
-    public void addFriend(User user) {
+    public void addFriend(User user,View v) {
 
     }
 

@@ -84,7 +84,7 @@ public class AdapterNotifications extends ArrayAdapter<User> {
             }
         });
 
-        title.setText(user.getfName() + " " + user.getlName() + "\n" + user.getGender());
+        title.setText(user.getfName() + " " + user.getlName() + "\n" + ((user.getGender() == null) ? "" : user.getGender()));
 
 
         return convertView;

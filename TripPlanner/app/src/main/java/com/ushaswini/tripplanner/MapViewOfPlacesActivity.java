@@ -1,5 +1,6 @@
 package com.ushaswini.tripplanner;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
@@ -40,6 +41,8 @@ IShareDirections{
     ArrayList<LatLng> pointsOnMap;
     LatLngBounds.Builder bounds_builder;
 
+    ProgressDialog progressDialog;
+
 
 
     @Override
@@ -48,11 +51,17 @@ IShareDirections{
         setContentView(R.layout.activity_map_view_of_places);
 
         setTitle("Places to Visit");
+
         try{
             places = new ArrayList<>();
             pointsOnMap = new ArrayList<>();
 
             bounds_builder = new LatLngBounds.Builder();
+
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Loading");
+            progressDialog.show();
+
 
 
             if(getIntent().getExtras().containsKey("places")){
@@ -114,6 +123,7 @@ IShareDirections{
     }
 
     @Override
+
     public void onMapReady(GoogleMap googleMap) {
 
         final int zoomWidth = getResources().getDisplayMetrics().widthPixels;
@@ -126,8 +136,8 @@ IShareDirections{
                 @Override
                 public void onMapLoaded() {
                     LatLngBounds bounds = bounds_builder.build();
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,5));
-                    mMap.animateCamera(CameraUpdateFactory.zoomIn());
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,zoomWidth,zoomHeight,zoomPadding));
+                    //mMap.animateCamera(CameraUpdateFactory.zoomIn());
                     Log.d("demo","camera moved");
                 }
             });
@@ -240,6 +250,7 @@ IShareDirections{
     public void postLine(PolylineOptions lineOptions) {
         if(lineOptions != null){
             mMap.addPolyline(lineOptions);
+            progressDialog.hide();
         }
     }
 }

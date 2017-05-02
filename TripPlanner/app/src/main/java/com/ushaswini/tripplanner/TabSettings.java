@@ -121,7 +121,7 @@ public class TabSettings extends Fragment {
 
                             if (currentUser.getGender() == User.GENDER.FEMALE) {
                                 femaleBtn.setChecked(true);
-                            } else {
+                            } else if(currentUser.getGender() == User.GENDER.MALE){
                                 maleBtn.setChecked(true);
                             }
                         }

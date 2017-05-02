@@ -27,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -437,7 +438,7 @@ return false;
     }
 
     @Override
-    public void addFriend(final User friendUser) {
+    public void addFriend(final User friendUser, final View v) {
 
         try{
             new AlertDialog.Builder(this)
@@ -458,7 +459,13 @@ return false;
                             childUpdates.put("/users/" + user.getUid()  ,postCurrentUser);
                             childUpdates.put("/users/" + friendUser.getUid(),postUser);
 
-                            databaseReference.updateChildren(childUpdates);
+                            databaseReference.updateChildren(childUpdates, new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                    ((ImageButton)v).setImageResource(R.mipmap.ic_sent);
+
+                                }
+                            });
 
                             Toast.makeText(TabbedActivity.this, "Friend request sent", Toast.LENGTH_SHORT).show();
 

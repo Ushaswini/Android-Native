@@ -24,6 +24,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
@@ -51,13 +52,17 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class AddTripActivity extends AppCompatActivity implements ISharePlaces,GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks{
+public class AddTripActivity extends AppCompatActivity implements
+        ISharePlaces,GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks,
+        AdapterFriends.IHandleConnect,
+AdapterPlaces.IShareData{
 
     final int ACTIVITY_SELECT_IMAGE = 1234;
     final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -69,6 +74,12 @@ public class AddTripActivity extends AppCompatActivity implements ISharePlaces,G
     EditText etName;
     EditText etDescription;
     AutoCompleteTextView at_destination;
+
+    ListView ltPlaces;
+    ListView ltFriends;
+    ArrayList<User> members;
+
+
 
     TripDetails trip;
 
@@ -91,6 +102,13 @@ public class AddTripActivity extends AppCompatActivity implements ISharePlaces,G
 
     PlacesTask placesTask;
 
+    ArrayList<PlaceDetails> places;
+    HashMap<Integer,PlaceDetails> placesMap;
+
+
+    AdapterFriends adapter;
+    AdapterPlaces adapterPlaces;
+
 
 
     View.OnClickListener coverPhotoChangeListener = new View.OnClickListener() {
@@ -109,9 +127,9 @@ public class AddTripActivity extends AppCompatActivity implements ISharePlaces,G
 
             String name = etName.getText().toString();
             String description = etDescription.getText().toString();
-            String location  = at_destination.getText().toString();
+            //String location  = at_destination.getText().toString();
 
-            trip = new TripDetails(name,location,imageUri,uid,description,currentUser.getUid());
+            trip = new TripDetails(name,"",imageUri,uid,description,currentUser.getUid());
 
             trip.addFriends(friendsToAdd);
             trip.addLocations(placesToAdd);
@@ -182,7 +200,23 @@ public class AddTripActivity extends AppCompatActivity implements ISharePlaces,G
             btnCancel = (Button) findViewById(R.id.btn_cancel);
             etName = (EditText) findViewById(R.id.et_trip_name);
             etDescription = (EditText)findViewById(R.id.et_trip_details);
-            at_destination = (AutoCompleteTextView) findViewById(R.id.at_destination);
+
+            ltFriends = (ListView) findViewById(R.id.lt_friends);
+            ltPlaces = (ListView) findViewById(R.id.lt_places);
+
+            places = new ArrayList<>();
+            placesMap = new HashMap<>();
+            members = new ArrayList<>();
+
+            adapterPlaces = new AdapterPlaces(this,R.layout.custom_places_row,places,true);
+            ltPlaces.setAdapter(adapterPlaces);
+            adapterPlaces.setNotifyOnChange(true);
+
+            adapter = new AdapterFriends(this, R.layout.custom_friend_row,members,false,true,false);
+            adapter.setNotifyOnChange(true);
+            ltFriends.setAdapter(adapter);
+
+            //at_destination = (AutoCompleteTextView) findViewById(R.id.at_destination);
             //etLocation = (EditText) findViewById(R.id.et_location);
 
             imCoverPhoto.setOnClickListener(coverPhotoChangeListener);
@@ -208,6 +242,7 @@ public class AddTripActivity extends AppCompatActivity implements ISharePlaces,G
 
         }catch (Exception e){
             Toast.makeText(AddTripActivity.this, "Error occured.", Toast.LENGTH_SHORT).show();
+            Log.d("demo",e.getLocalizedMessage());
         }
 
 
@@ -221,6 +256,8 @@ public class AddTripActivity extends AppCompatActivity implements ISharePlaces,G
                         Log.d("user in reading",user.toString());
                     }catch (Exception e){
                         Toast.makeText(AddTripActivity.this, "Error occured.", Toast.LENGTH_SHORT).show();
+                        Log.d("demo",e.getLocalizedMessage());
+
                     }
                 }
             }
@@ -231,7 +268,7 @@ public class AddTripActivity extends AppCompatActivity implements ISharePlaces,G
             }
         };
 
-        at_destination.setOnTouchListener(new View.OnTouchListener() {
+        /*at_destination.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 at_destination.showDropDown();
@@ -255,7 +292,7 @@ public class AddTripActivity extends AppCompatActivity implements ISharePlaces,G
             public void afterTextChanged(Editable s) {
 
             }
-        });
+        });*/
 
     }
 
@@ -313,6 +350,8 @@ public class AddTripActivity extends AppCompatActivity implements ISharePlaces,G
 
         }catch (Exception e){
             Toast.makeText(this, "Error occured.", Toast.LENGTH_SHORT).show();
+            Log.d("demo",e.getLocalizedMessage());
+
         }
 
 
@@ -361,6 +400,9 @@ public class AddTripActivity extends AppCompatActivity implements ISharePlaces,G
                                         placeToAdd.setLat(place.getLatLng().latitude);
                                         placeToAdd.setLng(place.getLatLng().longitude);
 
+                                        places.add(placeToAdd);
+                                        adapterPlaces.notifyDataSetChanged();
+
                                         if(!placesToAdd.contains(placeToAdd)){
                                             placesToAdd.add(placeToAdd);
 
@@ -399,7 +441,10 @@ public class AddTripActivity extends AppCompatActivity implements ISharePlaces,G
                 case ACTIVITY_ADD_FRIENDS:{
                     if(resultCode == RESULT_OK){
                         ArrayList<String> friends = (ArrayList<String>) data.getSerializableExtra("friends_to_add");
+                        ArrayList<User> mem = (ArrayList<User>) data.getSerializableExtra("members");
                         friendsToAdd.addAll(friends);
+                        members.addAll(mem);
+                        adapter.notifyDataSetChanged();
                         Toast.makeText(this, "Successfully added friends to activity", Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -409,6 +454,8 @@ public class AddTripActivity extends AppCompatActivity implements ISharePlaces,G
 
         }catch (Exception e){
             Toast.makeText(this, "Error occured.", Toast.LENGTH_SHORT).show();
+            Log.d("demo",e.getLocalizedMessage());
+
         }
 
 
@@ -437,6 +484,7 @@ public class AddTripActivity extends AppCompatActivity implements ISharePlaces,G
                 imageUri = taskSnapshot.getDownloadUrl().toString();
                 imCoverPhoto.setImageBitmap(bitmap);
                 Toast.makeText(AddTripActivity.this, "Cover photo saved", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
@@ -454,6 +502,8 @@ public class AddTripActivity extends AppCompatActivity implements ISharePlaces,G
             at_destination.setAdapter(adapter);
         }catch (Exception e){
             Toast.makeText(this, "Error occured.", Toast.LENGTH_SHORT).show();
+            Log.d("demo",e.getLocalizedMessage());
+
         }
 
     }
@@ -471,5 +521,142 @@ public class AddTripActivity extends AppCompatActivity implements ISharePlaces,G
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    @Override
+    public void editPlace(final int position) {
+        final EditText et_number = new EditText(this);
+        et_number.setHint("Swap this with position");
+
+        new AlertDialog.Builder(this)
+                .setTitle("Re-order this place in trip")
+                .setMessage("Do you really want to edit this place's location?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        int i = Integer.valueOf(et_number.getText().toString());
+
+                        Log.d("position",position + "");
+                        Log.d("i",i + "");
+                        Log.d("places",places.toString());
+
+                        Collections.swap(places,position,i-1);
+                        adapterPlaces.notifyDataSetChanged();
+
+                        //currentTrip.getPlaces().remove(position);
+
+
+
+                        Toast.makeText(AddTripActivity.this, "Places swapped successfully", Toast.LENGTH_SHORT).show();
+
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                    }
+                })
+                .setView(et_number)
+                .show();
+    }
+
+    @Override
+    public void deletePlace(final int position) {
+        try{
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete this place from trip")
+                    .setMessage("Do you really want to delete this place")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            places.remove(position);
+                            adapterPlaces.notifyDataSetChanged();
+
+                            Toast.makeText(AddTripActivity.this, "Place Deleted", Toast.LENGTH_SHORT).show();
+
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+
+                        }
+                    })
+                    .show();
+        }catch (Exception e){
+            Toast.makeText(this, "Error Occured.", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void addFriend(User user,View v) {
+
+    }
+
+    @Override
+    public void displayReceivedMessage(User friend) {
+
+    }
+
+    @Override
+    public void displaySentMessage() {
+
+    }
+
+    @Override
+    public void removeFriend(User user) {
+
+    }
+
+    @Override
+    public void selectFriend(int position, View v) {
+
+    }
+
+    @Override
+    public void removeFriendFromTrip(final int position) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddTripActivity.this)
+                .setTitle("Do you want to remove this member from trip?")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try{
+                            if(members.get(position).getUid().equals(currentUser.getUid())){
+                                Toast.makeText(AddTripActivity.this, "If you want to exit group. Try from trip home page.", Toast.LENGTH_SHORT).show();
+                            }else {
+
+
+                                if (friendsToAdd.contains(members.get(position).getUid())) {
+
+                                    friendsToAdd.remove(position);
+                                    members.remove(position);
+                                    adapter.notifyDataSetChanged();
+
+                                    // databaseReference.child("trips/" + tripId + "/friendsUids" + ).removeValue();
+                                    Toast.makeText(AddTripActivity.this, "Successfully removed member from trip.", Toast.LENGTH_SHORT).show();
+                                    //finish();
+                                } else {
+                                    Toast.makeText(AddTripActivity.this, "Not your friend to remove from trip.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                        }catch (Exception e){
+                            Toast.makeText(AddTripActivity.this, "Error occured.", Toast.LENGTH_SHORT).show();
+                            Log.d("demo",e.getLocalizedMessage());
+
+                        }
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        builder.show();
     }
 }

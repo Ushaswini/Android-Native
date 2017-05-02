@@ -41,6 +41,13 @@
         android:icon="@drawable/ic_map"
         android:title="View places on Map"
         />
+    <item
+        android:id="@+id/action_navigate"
+        android:orderInCategory="102"
+        app:showAsAction = "never"
+        android:icon="@drawable/ic_map"
+        android:title="Start Navigation"
+        />
 
 
 </menu>

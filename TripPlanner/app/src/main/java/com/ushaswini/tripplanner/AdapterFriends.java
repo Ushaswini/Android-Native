@@ -139,8 +139,8 @@ public class AdapterFriends extends ArrayAdapter<User> {
 
                     case UNCONNECTED:
                         {
-                            iHandleConnect.addFriend(friend);
-                            imageButton.setImageResource(R.mipmap.ic_sent);
+                            iHandleConnect.addFriend(friend,imageButton);
+                            //imageButton.setImageResource(R.mipmap.ic_sent);
                             break;
 
 
@@ -178,7 +178,7 @@ public class AdapterFriends extends ArrayAdapter<User> {
     }
 
     interface IHandleConnect{
-        void addFriend(User user);
+        void addFriend(User user, View v);
         void displayReceivedMessage(User friend);
         void displaySentMessage();
         void removeFriend(User user);

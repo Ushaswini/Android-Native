@@ -302,7 +302,7 @@ public class AddFriendToTripActivity extends AppCompatActivity implements Adapte
     }
 
     @Override
-    public void addFriend(User user) {
+    public void addFriend(User user,View v) {
 
     }
 
